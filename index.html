@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipeez — Discover Your Next Favourite Recipe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===================================================
+     NAVIGATION
+     =================================================== -->
+<header class="header" id="header">
+    <div class="container">
+        <nav class="nav">
+            <a href="index.html" class="nav-logo">
+                <img src="logo/logo.png" alt="Recipeez" height="46">
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="recipes.html">Recipes</a></li>
+                <li class="has-dropdown">
+                    <a href="recipes.html">Categories <span class="chevron">▾</span></a>
+                    <ul class="dropdown">
+                        <li><a href="recipes.html">Breakfast</a></li>
+                        <li><a href="recipes.html">Lunch</a></li>
+                        <li><a href="recipes.html">Dinner</a></li>
+                        <li><a href="recipes.html">Desserts</a></li>
+                        <li><a href="recipes.html">Snacks</a></li>
+                        <li><a href="recipes.html">Vegan</a></li>
+                    </ul>
+                </li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-icon" id="searchToggle" aria-label="Search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                </button>
+                <a href="login.html" class="btn btn-outline nav-cta" style="padding:10px 18px;font-size:.88rem;">Log In</a>
+                <a href="submit-recipe.html" class="btn btn-amber nav-cta">Submit Recipe</a>
+                <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </nav>
+    </div>
+    <!-- Search panel (hidden by default) -->
+    <div class="search-panel" id="searchPanel">
+        <div class="container">
+            <form class="search-form" id="searchForm">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" placeholder="Search recipes, ingredients, cuisines…" id="searchInput" autofocus>
+                <button type="button" class="btn-icon search-close" id="searchClose" aria-label="Close search">✕</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<!-- ===================================================
+     HERO
+     =================================================== -->
+<section class="hero" id="home">
+    <div class="hero-media">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1800&q=80" alt="Beautiful food spread" class="hero-img">
+        <div class="hero-overlay"></div>
+    </div>
+    <div class="container">
+        <div class="hero-content">
+            <span class="hero-pill">🍯 Handpicked for You</span>
+            <h1 class="hero-title">Cook Something<br><em>Beautiful</em> Tonight</h1>
+            <p class="hero-subtitle">Thousands of recipes from home cooks like you — simple, seasonal, and always delicious.</p>
+            <div class="hero-cta">
+                <a href="#recipes" class="btn btn-amber btn-lg">Explore Recipes</a>
+                <a href="#" class="btn btn-ghost btn-lg">
+                    <span class="play-icon">▶</span> Watch Video
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-num">2,400+</span>
+                    <span class="stat-label">Recipes</span>
+                </div>
+                <div class="stat-rule"></div>
+                <div class="stat">
+                    <span class="stat-num">180k</span>
+                    <span class="stat-label">Home Cooks</span>
+                </div>
+                <div class="stat-rule"></div>
+                <div class="stat">
+                    <span class="stat-num">4.9 ★</span>
+                    <span class="stat-label">Avg Rating</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll-hint">
+        <span>Scroll to explore</span>
+        <div class="scroll-bar"></div>
+    </div>
+</section>
+
+<!-- ===================================================
+     CATEGORIES
+     =================================================== -->
+<section class="section" id="categories">
+    <div class="container">
+        <div class="section-header">
+            <div>
+                <span class="eyebrow">Browse by type</span>
+                <h2 class="section-title">What Are You Craving?</h2>
+            </div>
+            <a href="#" class="link-all">View all categories →</a>
+        </div>
+        <div class="categories-grid">
+            <a href="#" class="cat-card">
+                <div class="cat-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=400&q=80" alt="Breakfast">
+                </div>
+                <span class="cat-name">Breakfast</span>
+                <span class="cat-count">142 recipes</span>
+            </a>
+            <a href="#" class="cat-card">
+                <div class="cat-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=400&q=80" alt="Lunch">
+                </div>
+                <span class="cat-name">Lunch</span>
+                <span class="cat-count">208 recipes</span>
+            </a>
+            <a href="#" class="cat-card">
+                <div class="cat-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=400&q=80" alt="Dinner">
+                </div>
+                <span class="cat-name">Dinner</span>
+                <span class="cat-count">315 recipes</span>
+            </a>
+            <a href="#" class="cat-card">
+                <div class="cat-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&q=80" alt="Desserts">
+                </div>
+                <span class="cat-name">Desserts</span>
+                <span class="cat-count">189 recipes</span>
+            </a>
+            <a href="#" class="cat-card">
+                <div class="cat-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=400&q=80" alt="Vegan">
+                </div>
+                <span class="cat-name">Vegan</span>
+                <span class="cat-count">97 recipes</span>
+            </a>
+            <a href="#" class="cat-card">
+                <div class="cat-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=400&q=80" alt="Snacks">
+                </div>
+                <span class="cat-name">Snacks</span>
+                <span class="cat-count">74 recipes</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ===================================================
+     FEATURED RECIPE
+     =================================================== -->
+<section class="section section-tinted" id="featured">
+    <div class="container">
+        <div class="section-header">
+            <div>
+                <span class="eyebrow">Editor's Pick</span>
+                <h2 class="section-title">Featured Recipe</h2>
+            </div>
+        </div>
+        <div class="featured-card">
+            <div class="featured-media">
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80" alt="Crispy Margherita Pizza">
+                <span class="featured-badge">⭐ Editor's Pick</span>
+            </div>
+            <div class="featured-body">
+                <div class="tag-row">
+                    <span class="tag">Dinner</span>
+                    <span class="tag tag-time">⏱ 35 min</span>
+                    <span class="tag tag-easy">Easy</span>
+                </div>
+                <h3 class="featured-title">Crispy Margherita Pizza with Fresh Basil &amp; Burrata</h3>
+                <p class="featured-desc">A rustic Neapolitan-style pizza with a perfectly blistered crust, San Marzano tomato sauce, fresh burrata, and torn basil. Simple ingredients, extraordinary flavour.</p>
+                <div class="recipe-author">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=80&q=80" alt="Sarah Mitchell" class="author-avatar">
+                    <div>
+                        <span class="author-name">Sarah Mitchell</span>
+                        <span class="author-meta">Home Cook · 3 years</span>
+                    </div>
+                </div>
+                <div class="recipe-info-row">
+                    <div class="info-chip"><span>👥</span> Serves 4</div>
+                    <div class="info-chip"><span>🔥</span> 340 cal</div>
+                    <div class="info-chip"><span>⭐</span> 4.9 (283)</div>
+                </div>
+                <a href="recipe-single.html" class="btn btn-amber btn-lg">View Full Recipe →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================================================
+     LATEST RECIPES
+     =================================================== -->
+<section class="section" id="recipes">
+    <div class="container">
+        <div class="section-header">
+            <div>
+                <span class="eyebrow">Fresh from the kitchen</span>
+                <h2 class="section-title">Latest Recipes</h2>
+            </div>
+            <div class="filter-row">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="trending">Trending</button>
+                <button class="filter-btn" data-filter="quick">Quick</button>
+                <button class="filter-btn" data-filter="vegetarian">Vegetarian</button>
+            </div>
+        </div>
+
+        <div class="recipes-grid">
+
+            <article class="recipe-card" data-tags="trending breakfast">
+                <a href="recipe-single.html" class="card-media">
+                    <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=80" alt="Fluffy Pancakes">
+                    <span class="card-pill card-pill-amber">Trending 🔥</span>
+                    <button class="btn-heart" aria-label="Save recipe">♡</button>
+                </a>
+                <div class="card-body">
+                    <div class="tag-row">
+                        <span class="tag">Breakfast</span>
+                        <span class="tag tag-time">⏱ 20 min</span>
+                    </div>
+                    <h3 class="card-title"><a href="recipe-single.html">Fluffy Japanese Soufflé Pancakes</a></h3>
+                    <div class="card-foot">
+                        <span class="card-rating">★ 4.8 <em>(124)</em></span>
+                        <span class="card-by">by @maplekitchen</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="recipe-card" data-tags="vegetarian quick">
+                <a href="recipe-single.html" class="card-media">
+                    <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=600&q=80" alt="Buddha Bowl">
+                    <button class="btn-heart" aria-label="Save recipe">♡</button>
+                </a>
+                <div class="card-body">
+                    <div class="tag-row">
+                        <span class="tag">Vegan</span>
+                        <span class="tag tag-time">⏱ 25 min</span>
+                    </div>
+                    <h3 class="card-title"><a href="recipe-single.html">Rainbow Buddha Bowl with Tahini Dressing</a></h3>
+                    <div class="card-foot">
+                        <span class="card-rating">★ 4.7 <em>(89)</em></span>
+                        <span class="card-by">by @greenplate</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="recipe-card" data-tags="dinner">
+                <a href="recipe-single.html" class="card-media">
+                    <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80" alt="Creamy Lemon Pasta">
+                    <span class="card-pill card-pill-green">New ✨</span>
+                    <button class="btn-heart" aria-label="Save recipe">♡</button>
+                </a>
+                <div class="card-body">
+                    <div class="tag-row">
+                        <span class="tag">Dinner</span>
+                        <span class="tag tag-time">⏱ 30 min</span>
+                    </div>
+                    <h3 class="card-title"><a href="recipe-single.html">Creamy Lemon Pasta with Asparagus</a></h3>
+                    <div class="card-foot">
+                        <span class="card-rating">★ 4.9 <em>(211)</em></span>
+                        <span class="card-by">by @tasteofitaly</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="recipe-card" data-tags="quick breakfast">
+                <a href="recipe-single.html" class="card-media">
+                    <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=600&q=80" alt="Avocado Toast">
+                    <button class="btn-heart" aria-label="Save recipe">♡</button>
+                </a>
+                <div class="card-body">
+                    <div class="tag-row">
+                        <span class="tag">Breakfast</span>
+                        <span class="tag tag-time">⏱ 10 min</span>
+                    </div>
+                    <h3 class="card-title"><a href="recipe-single.html">Perfect Avocado Toast with Poached Egg</a></h3>
+                    <div class="card-foot">
+                        <span class="card-rating">★ 4.6 <em>(157)</em></span>
+                        <span class="card-by">by @morningkitchen</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="recipe-card" data-tags="trending">
+                <a href="recipe-single.html" class="card-media">
+                    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=600&q=80" alt="Chocolate Lava Cake">
+                    <button class="btn-heart" aria-label="Save recipe">♡</button>
+                </a>
+                <div class="card-body">
+                    <div class="tag-row">
+                        <span class="tag">Dessert</span>
+                        <span class="tag tag-time">⏱ 55 min</span>
+                    </div>
+                    <h3 class="card-title"><a href="recipe-single.html">Dark Chocolate Lava Cake with Vanilla Ice Cream</a></h3>
+                    <div class="card-foot">
+                        <span class="card-rating">★ 5.0 <em>(342)</em></span>
+                        <span class="card-by">by @dessertdreams</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="recipe-card" data-tags="trending lunch">
+                <a href="recipe-single.html" class="card-media">
+                    <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=600&q=80" alt="Smash Burger">
+                    <span class="card-pill card-pill-purple">Popular 👑</span>
+                    <button class="btn-heart" aria-label="Save recipe">♡</button>
+                </a>
+                <div class="card-body">
+                    <div class="tag-row">
+                        <span class="tag">Lunch</span>
+                        <span class="tag tag-time">⏱ 40 min</span>
+                    </div>
+                    <h3 class="card-title"><a href="recipe-single.html">Smash Burger with Caramelised Onions</a></h3>
+                    <div class="card-foot">
+                        <span class="card-rating">★ 4.8 <em>(298)</em></span>
+                        <span class="card-by">by @burgerboss</span>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+
+        <div class="load-more-wrap">
+            <a href="#" class="btn btn-outline">Load More Recipes</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===================================================
+     SUBMIT BANNER
+     =================================================== -->
+<section class="section section-tinted" id="submit">
+    <div class="container">
+        <div class="submit-banner">
+            <div class="submit-body">
+                <span class="eyebrow" style="color: var(--primary);">Share Your Recipe</span>
+                <h2 class="banner-title">Have a Recipe the World Should Try?</h2>
+                <p class="banner-desc">Join our community of home cooks and share what you love to make. Every recipe gets reviewed and loved.</p>
+                <a href="submit-recipe.html" class="btn btn-amber btn-lg">Submit Your Recipe →</a>
+            </div>
+            <div class="submit-media">
+                <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=700&q=80" alt="Cooking together">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================================================
+     NEWSLETTER
+     =================================================== -->
+<section class="newsletter-section">
+    <div class="container">
+        <div class="newsletter-inner">
+            <div class="newsletter-icon">🍯</div>
+            <h2 class="newsletter-title">Fresh Recipes, Every Week</h2>
+            <p class="newsletter-desc">Get handpicked recipes and cooking tips delivered straight to your inbox — no spam, only good food.</p>
+            <form class="newsletter-form" id="newsletterForm">
+                <input type="email" placeholder="your@email.com" class="newsletter-input" required>
+                <button type="submit" class="btn btn-amber">Subscribe Free</button>
+            </form>
+            <p class="newsletter-note">Join 18,000+ food lovers · Unsubscribe anytime</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===================================================
+     FOOTER
+     =================================================== -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+
+            <div class="footer-brand">
+                <div class="footer-logo-wrap">
+                    <img src="logo/logo.png" alt="Recipeez" height="52">
+                </div>
+                <p class="footer-tagline">Inspiring home cooks, one recipe at a time. Discover, cook, and share what you love.</p>
+                <div class="social-row">
+                    <a href="#" class="social-btn" aria-label="Instagram">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    </a>
+                    <a href="#" class="social-btn" aria-label="Facebook">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    </a>
+                    <a href="#" class="social-btn" aria-label="Pinterest">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.99.04-2.85.19-.77 1.27-5.4 1.27-5.4s-.33-.65-.33-1.62c0-1.52.88-2.65 1.98-2.65.93 0 1.38.7 1.38 1.54 0 .94-.6 2.34-.91 3.64-.26 1.09.54 1.97 1.6 1.97 1.92 0 3.4-2.02 3.4-4.94 0-2.58-1.86-4.39-4.51-4.39-3.07 0-4.87 2.3-4.87 4.68 0 .93.36 1.92.8 2.46.09.11.1.2.07.31l-.3 1.21c-.05.19-.16.23-.37.14-1.39-.65-2.26-2.68-2.26-4.32 0-3.51 2.55-6.74 7.36-6.74 3.86 0 6.86 2.75 6.86 6.42 0 3.83-2.41 6.9-5.76 6.9-1.13 0-2.19-.59-2.55-1.28l-.69 2.59c-.25.97-.93 2.18-1.39 2.92.05.01.09.02.14.02.02 0 .04 0 .06-.01C17.39 21.94 22 17.37 22 12c0-5.52-4.48-10-10-10z"/></svg>
+                    </a>
+                    <a href="#" class="social-btn" aria-label="YouTube">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-col-title">Recipes</h4>
+                <ul>
+                    <li><a href="recipes.html">Breakfast</a></li>
+                    <li><a href="recipes.html">Lunch</a></li>
+                    <li><a href="recipes.html">Dinner</a></li>
+                    <li><a href="recipes.html">Desserts</a></li>
+                    <li><a href="recipes.html">Vegan</a></li>
+                    <li><a href="recipes.html">Quick Meals</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-col-title">Community</h4>
+                <ul>
+                    <li><a href="submit-recipe.html">Submit a Recipe</a></li>
+                    <li><a href="recipes.html">Top Cooks</a></li>
+                    <li><a href="blog.html">Recipe Blog</a></li>
+                    <li><a href="blog.html">Cooking Tips</a></li>
+                    <li><a href="#">Reviews</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-col-title">Company</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Recipeez. Made with 🍯 for food lovers everywhere.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

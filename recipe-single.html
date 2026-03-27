@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluffy Japanese Soufflé Pancakes — Recipeez</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<header class="header" id="header">
+    <div class="container">
+        <nav class="nav">
+            <a href="index.html" class="nav-logo">
+                <img src="logo/logo.png" alt="Recipeez" height="46">
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="recipes.html">Recipes</a></li>
+                <li class="has-dropdown">
+                    <a href="recipes.html">Categories <span class="chevron">▾</span></a>
+                    <ul class="dropdown">
+                        <li><a href="recipes.html">Breakfast</a></li>
+                        <li><a href="recipes.html">Lunch</a></li>
+                        <li><a href="recipes.html">Dinner</a></li>
+                        <li><a href="recipes.html">Desserts</a></li>
+                        <li><a href="recipes.html">Snacks</a></li>
+                        <li><a href="recipes.html">Vegan</a></li>
+                    </ul>
+                </li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-icon" id="searchToggle" aria-label="Search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                </button>
+                <a href="login.html" class="btn btn-outline nav-cta" style="padding:10px 18px;font-size:.88rem;">Log In</a>
+                <a href="submit-recipe.html" class="btn btn-amber nav-cta">Submit Recipe</a>
+                <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </nav>
+    </div>
+    <div class="search-panel" id="searchPanel">
+        <div class="container">
+            <form class="search-form" id="searchForm">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" placeholder="Search recipes, ingredients, cuisines…" id="searchInput" autofocus>
+                <button type="button" class="btn-icon search-close" id="searchClose" aria-label="Close search">✕</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<!-- RECIPE BANNER -->
+<div class="recipe-banner">
+    <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=1800&q=80" alt="Fluffy Japanese Soufflé Pancakes">
+    <div class="recipe-banner-overlay"></div>
+    <div class="recipe-banner-content">
+        <div class="container">
+            <nav class="breadcrumb" style="margin-bottom:14px;">
+                <a href="index.html" style="color:rgba(255,255,255,0.6);">Home</a>
+                <span class="breadcrumb-sep" style="color:rgba(255,255,255,0.4);">›</span>
+                <a href="recipes.html" style="color:rgba(255,255,255,0.6);">Recipes</a>
+                <span class="breadcrumb-sep" style="color:rgba(255,255,255,0.4);">›</span>
+                <span style="color:#fff;">Fluffy Japanese Soufflé Pancakes</span>
+            </nav>
+            <div class="tag-row">
+                <span class="tag" style="background:rgba(255,255,255,0.15);color:#fff;">Breakfast</span>
+                <span class="tag tag-easy">Easy</span>
+                <span class="card-pill card-pill-amber" style="position:static;padding:5px 12px;font-size:.76rem;">Trending 🔥</span>
+            </div>
+            <h1 class="recipe-banner-title">Fluffy Japanese Soufflé Pancakes</h1>
+            <div class="recipe-meta-strip">
+                <div class="recipe-meta-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span>Prep: <strong>15 min</strong></span>
+                </div>
+                <div class="recipe-meta-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                    <span>Cook: <strong>20 min</strong></span>
+                </div>
+                <div class="recipe-meta-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span>Serves: <strong>2</strong></span>
+                </div>
+                <div class="recipe-meta-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <span>★ 4.8 <strong>(124 reviews)</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- RECIPE BODY -->
+<section class="section">
+    <div class="container">
+        <div class="recipe-body-layout">
+
+            <!-- MAIN CONTENT -->
+            <div>
+                <!-- STATS BAR -->
+                <div class="recipe-stats-card">
+                    <div class="recipe-stat">
+                        <div class="recipe-stat-label">Prep Time</div>
+                        <div class="recipe-stat-value">15 min</div>
+                    </div>
+                    <div class="recipe-stat">
+                        <div class="recipe-stat-label">Cook Time</div>
+                        <div class="recipe-stat-value">20 min</div>
+                    </div>
+                    <div class="recipe-stat">
+                        <div class="recipe-stat-label">Servings</div>
+                        <div class="recipe-stat-value">2</div>
+                    </div>
+                    <div class="recipe-stat">
+                        <div class="recipe-stat-label">Difficulty</div>
+                        <div class="recipe-stat-value">Easy</div>
+                    </div>
+                </div>
+
+                <!-- DESCRIPTION -->
+                <p class="recipe-description">
+                    These ultra-fluffy, cloud-like Japanese soufflé pancakes are the Instagram-worthy breakfast you've been dreaming about. Jiggly, pillowy, and delicately sweet — they're worlds apart from your regular pancakes. The secret is a perfectly stiff meringue folded gently into a smooth batter, then cooked low and slow with a lid on to create that legendary height.
+                </p>
+
+                <!-- INGREDIENTS -->
+                <h2 class="recipe-section-title">Ingredients</h2>
+                <div class="ingredients-list">
+                    <div class="ingredient-item"><div class="ingredient-check"></div> 2 large eggs, separated</div>
+                    <div class="ingredient-item"><div class="ingredient-check"></div> 2 tbsp whole milk</div>
+                    <div class="ingredient-item"><div class="ingredient-check"></div> ½ tsp vanilla extract</div>
+                    <div class="ingredient-item"><div class="ingredient-check"></div> ¼ cup (30g) all-purpose flour</div>
+                    <div class="ingredient-item"><div class="ingredient-check"></div> ½ tsp baking powder</div>
+                    <div class="ingredient-item"><div class="ingredient-check"></div> 3 tbsp (36g) caster sugar</div>
+                    <div class="ingredient-item"><div class="ingredient-check"></div> ¼ tsp cream of tartar</div>
+                    <div class="ingredient-item"><div class="ingredient-check"></div> 1 tbsp neutral oil (for the pan)</div>
+                    <div class="ingredient-item"><div class="ingredient-check"></div> Icing sugar, whipped cream &amp; fresh berries, to serve</div>
+                </div>
+
+                <!-- INSTRUCTIONS -->
+                <h2 class="recipe-section-title">Instructions</h2>
+                <div class="instructions-list">
+                    <div class="instruction-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Prepare the yolk mixture</h4>
+                            <p>In a medium bowl, whisk the egg yolks, milk, and vanilla extract together until smooth. Sift in the flour and baking powder, then mix gently until just combined. Set aside.</p>
+                        </div>
+                    </div>
+                    <div class="instruction-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Make the meringue</h4>
+                            <p>In a clean, grease-free bowl, beat the egg whites with the cream of tartar using a hand mixer on medium speed. Gradually add the caster sugar and increase to high speed, beating until stiff, glossy peaks form — about 3–4 minutes.</p>
+                        </div>
+                    </div>
+                    <div class="instruction-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Fold together gently</h4>
+                            <p>Add one third of the meringue to the yolk mixture and stir to loosen. Gently fold in the remaining meringue in two additions using a rubber spatula, keeping as much air in the batter as possible. Stop folding when just combined — streaks are fine.</p>
+                        </div>
+                    </div>
+                    <div class="instruction-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Cook low and slow</h4>
+                            <p>Heat a non-stick pan over the lowest heat setting and brush lightly with oil. Spoon the batter into two tall mounds (use a ring mould if available). Cover with a lid and cook for 5–6 minutes until the base is set and golden. Carefully flip with a wide spatula, cover again, and cook for another 4–5 minutes.</p>
+                        </div>
+                    </div>
+                    <div class="instruction-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h4>Serve immediately</h4>
+                            <p>Transfer the pancakes to a plate and dust generously with icing sugar. Serve straight away with a dollop of whipped cream and fresh berries — they deflate quickly, so don't wait!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AUTHOR -->
+                <div class="recipe-author">
+                    <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=80&q=80" alt="@maplekitchen" class="author-avatar">
+                    <div>
+                        <span class="author-name">@maplekitchen</span>
+                        <span class="author-meta">Home Cook · 5 years on Recipeez</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIDEBAR -->
+            <aside>
+                <div class="recipe-sidebar-card">
+                    <p class="sidebar-title">You May Also Like</p>
+                    <a href="recipe-single.html" class="sidebar-recipe-mini">
+                        <div class="sidebar-mini-img">
+                            <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=140&q=80" alt="Avocado Toast">
+                        </div>
+                        <div>
+                            <span class="sidebar-mini-title">Perfect Avocado Toast with Poached Egg</span>
+                            <span class="sidebar-mini-meta">⏱ 10 min · ★ 4.6</span>
+                        </div>
+                    </a>
+                    <a href="recipe-single.html" class="sidebar-recipe-mini">
+                        <div class="sidebar-mini-img">
+                            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=140&q=80" alt="Smoothie Bowl">
+                        </div>
+                        <div>
+                            <span class="sidebar-mini-title">Tropical Smoothie Bowl with Granola</span>
+                            <span class="sidebar-mini-meta">⏱ 10 min · ★ 4.5</span>
+                        </div>
+                    </a>
+                    <a href="recipe-single.html" class="sidebar-recipe-mini">
+                        <div class="sidebar-mini-img">
+                            <img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=140&q=80" alt="French Toast">
+                        </div>
+                        <div>
+                            <span class="sidebar-mini-title">Classic French Toast with Maple Syrup</span>
+                            <span class="sidebar-mini-meta">⏱ 15 min · ★ 4.7</span>
+                        </div>
+                    </a>
+                    <a href="recipe-single.html" class="sidebar-recipe-mini">
+                        <div class="sidebar-mini-img">
+                            <img src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=140&q=80" alt="Acai Bowl">
+                        </div>
+                        <div>
+                            <span class="sidebar-mini-title">Açaí Bowl with Coconut and Chia Seeds</span>
+                            <span class="sidebar-mini-meta">⏱ 12 min · ★ 4.8</span>
+                        </div>
+                    </a>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+</section>
+
+<!-- MORE RECIPES -->
+<section class="section section-tinted">
+    <div class="container">
+        <div class="section-header">
+            <div>
+                <span class="eyebrow">Keep exploring</span>
+                <h2 class="section-title">More Breakfast Recipes</h2>
+            </div>
+            <a href="recipes.html" class="link-all">View all recipes →</a>
+        </div>
+        <div class="recipes-grid">
+            <article class="recipe-card">
+                <a href="recipe-single.html" class="card-media">
+                    <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=600&q=80" alt="Avocado Toast">
+                    <button class="btn-heart" aria-label="Save recipe">♡</button>
+                </a>
+                <div class="card-body">
+                    <div class="tag-row"><span class="tag">Breakfast</span><span class="tag tag-time">⏱ 10 min</span></div>
+                    <h3 class="card-title"><a href="recipe-single.html">Perfect Avocado Toast with Poached Egg</a></h3>
+                    <div class="card-foot"><span class="card-rating">★ 4.6 <em>(157)</em></span><span class="card-by">by @morningkitchen</span></div>
+                </div>
+            </article>
+            <article class="recipe-card">
+                <a href="recipe-single.html" class="card-media">
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80" alt="Smoothie Bowl">
+                    <button class="btn-heart" aria-label="Save recipe">♡</button>
+                </a>
+                <div class="card-body">
+                    <div class="tag-row"><span class="tag">Breakfast</span><span class="tag tag-time">⏱ 10 min</span></div>
+                    <h3 class="card-title"><a href="recipe-single.html">Tropical Smoothie Bowl with Granola</a></h3>
+                    <div class="card-foot"><span class="card-rating">★ 4.5 <em>(76)</em></span><span class="card-by">by @tropicaltaste</span></div>
+                </div>
+            </article>
+            <article class="recipe-card">
+                <a href="recipe-single.html" class="card-media">
+                    <img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=600&q=80" alt="French Toast">
+                    <button class="btn-heart" aria-label="Save recipe">♡</button>
+                </a>
+                <div class="card-body">
+                    <div class="tag-row"><span class="tag">Breakfast</span><span class="tag tag-time">⏱ 15 min</span></div>
+                    <h3 class="card-title"><a href="recipe-single.html">Classic French Toast with Maple Syrup</a></h3>
+                    <div class="card-foot"><span class="card-rating">★ 4.7 <em>(203)</em></span><span class="card-by">by @brunchclub</span></div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo-wrap">
+                    <img src="logo/logo.png" alt="Recipeez" height="52">
+                </div>
+                <p class="footer-tagline">Inspiring home cooks, one recipe at a time. Discover, cook, and share what you love.</p>
+                <div class="social-row">
+                    <a href="#" class="social-btn" aria-label="Instagram">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    </a>
+                    <a href="#" class="social-btn" aria-label="Facebook">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    </a>
+                    <a href="#" class="social-btn" aria-label="Pinterest">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.99.04-2.85.19-.77 1.27-5.4 1.27-5.4s-.33-.65-.33-1.62c0-1.52.88-2.65 1.98-2.65.93 0 1.38.7 1.38 1.54 0 .94-.6 2.34-.91 3.64-.26 1.09.54 1.97 1.6 1.97 1.92 0 3.4-2.02 3.4-4.94 0-2.58-1.86-4.39-4.51-4.39-3.07 0-4.87 2.3-4.87 4.68 0 .93.36 1.92.8 2.46a.32.32 0 0 1 .07.31l-.3 1.21c-.05.19-.16.23-.37.14-1.39-.65-2.26-2.68-2.26-4.32 0-3.51 2.55-6.74 7.36-6.74 3.86 0 6.86 2.75 6.86 6.42 0 3.83-2.41 6.9-5.76 6.9-1.13 0-2.19-.59-2.55-1.28l-.69 2.59c-.25.97-.93 2.18-1.39 2.92A10 10 0 0 0 22 12c0-5.52-4.48-10-10-10z"/></svg>
+                    </a>
+                    <a href="#" class="social-btn" aria-label="YouTube">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-col-title">Recipes</h4>
+                <ul>
+                    <li><a href="recipes.html">Breakfast</a></li>
+                    <li><a href="recipes.html">Lunch</a></li>
+                    <li><a href="recipes.html">Dinner</a></li>
+                    <li><a href="recipes.html">Desserts</a></li>
+                    <li><a href="recipes.html">Vegan</a></li>
+                    <li><a href="recipes.html">Quick Meals</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-col-title">Community</h4>
+                <ul>
+                    <li><a href="submit-recipe.html">Submit a Recipe</a></li>
+                    <li><a href="recipes.html">Top Cooks</a></li>
+                    <li><a href="blog.html">Recipe Blog</a></li>
+                    <li><a href="blog.html">Cooking Tips</a></li>
+                    <li><a href="#">Reviews</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-col-title">Company</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Recipeez. Made with 🍯 for food lovers everywhere.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
