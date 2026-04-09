@@ -8,6 +8,17 @@ window.addEventListener('scroll', () => {
     header.classList.toggle('scrolled', window.scrollY > 10);
 }, { passive: true });
 
+// ---- Nav auth state — swap Log In ↔ Profile ----
+(function () {
+    const user = localStorage.getItem('recipeez_user');
+    const loginBtn = document.querySelector('.nav-actions a[href="login.html"]');
+    if (!loginBtn) return;
+    if (user) {
+        loginBtn.href = 'profile.html';
+        loginBtn.textContent = 'Profile';
+    }
+})();
+
 // ---- Mobile nav toggle ----
 const navToggle = document.getElementById('navToggle');
 const navLinks  = document.getElementById('navLinks');
@@ -89,13 +100,14 @@ document.getElementById('searchForm').addEventListener('submit', (e) => {
     }
 });
 
-// Close search on Escape
+// Close search / nav / gate modal on Escape
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         searchPanel.classList.remove('open');
         navLinks.classList.remove('open');
         navToggle.classList.remove('open');
         document.body.style.overflow = '';
+        document.getElementById('gateModal')?.classList.remove('open');
     }
 });
 
@@ -106,7 +118,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.add('active');
 
         const filter = btn.dataset.filter;
-        document.querySelectorAll('.recipe-card').forEach(card => {
+        document.querySelectorAll('.recipe-card, .blog-card').forEach(card => {
             if (filter === 'all' || card.dataset.tags?.includes(filter)) {
                 card.style.display = '';
                 requestAnimationFrame(() => card.style.opacity = '1');
@@ -117,6 +129,31 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
         });
     });
 });
+
+// ---- Recipe sort ----
+(function () {
+    const recipeSort = document.getElementById('recipeSort');
+    if (!recipeSort) return;
+    const grid = document.querySelector('.recipes-grid');
+    if (!grid) return;
+
+    // Store original order once on page load
+    Array.from(grid.querySelectorAll('.recipe-card')).forEach((c, i) => c.dataset.index = i);
+
+    recipeSort.addEventListener('change', () => {
+        const cards = Array.from(grid.querySelectorAll('.recipe-card'));
+        cards.sort((a, b) => {
+            if (recipeSort.value === 'rating') {
+                return parseFloat(b.dataset.rating || 0) - parseFloat(a.dataset.rating || 0);
+            }
+            if (recipeSort.value === 'time') {
+                return parseInt(a.dataset.time || 0) - parseInt(b.dataset.time || 0);
+            }
+            return parseInt(a.dataset.index) - parseInt(b.dataset.index);
+        });
+        cards.forEach(card => grid.appendChild(card));
+    });
+})()
 
 // ---- Heart / save toggle ----
 document.querySelectorAll('.btn-heart').forEach(btn => {
@@ -162,6 +199,268 @@ document.querySelector('a[href="#recipes"]')?.addEventListener('click', (e) => {
         window.scrollTo({ top, behavior: 'smooth' });
     }
 });
+
+// ---- Photo upload preview ----
+const photoInput = document.getElementById('recipe-photo');
+if (photoInput) {
+    const uploadArea    = document.getElementById('photoUploadArea');
+    const placeholder   = uploadArea.querySelector('.upload-placeholder');
+    const preview       = document.getElementById('photoPreview');
+    const previewImg    = document.getElementById('photoPreviewImg');
+    const fileName      = document.getElementById('photoFileName');
+    const removeBtn     = document.getElementById('removePhoto');
+    const removeBtnWrap = document.getElementById('removePhotoWrap');
+
+    photoInput.addEventListener('change', () => {
+        const file = photoInput.files[0];
+        if (!file) return;
+
+        if (file.size > 10 * 1024 * 1024) {
+            alert('Photo must be under 10 MB. Please choose a smaller file.');
+            photoInput.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImg.src       = e.target.result;
+            fileName.textContent = file.name;
+            placeholder.hidden   = true;
+            preview.hidden       = false;
+            removeBtnWrap.hidden = false;
+            uploadArea.classList.add('has-photo');
+        };
+        reader.readAsDataURL(file);
+    });
+
+    removeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        photoInput.value       = '';
+        previewImg.src         = '';
+        fileName.textContent   = '';
+        placeholder.hidden     = false;
+        preview.hidden         = true;
+        removeBtnWrap.hidden   = true;
+        uploadArea.classList.remove('has-photo');
+    });
+}
+
+// ---- Login gate — 3 free recipe views per 24 h, then prompt to subscribe ----
+(function () {
+    const lockedWrapper = document.querySelector('.recipe-locked-wrapper');
+    if (!lockedWrapper) return; // not a recipe page
+
+    const isLoggedIn = !!localStorage.getItem('recipeez_user');
+    if (isLoggedIn) return; // logged-in users see everything
+
+    const FREE_LIMIT = 3;
+    const COUNT_KEY  = 'recipeez_free_views';
+    const START_KEY  = 'recipeez_window_start';
+    const WINDOW_MS  = 24 * 60 * 60 * 1000; // 24 hours
+
+    // Reset counter if 24 h window has elapsed
+    const windowStart = parseInt(localStorage.getItem(START_KEY) || '0', 10);
+    if (windowStart && Date.now() - windowStart >= WINDOW_MS) {
+        localStorage.removeItem(COUNT_KEY);
+        localStorage.removeItem(START_KEY);
+    }
+
+    let views = parseInt(localStorage.getItem(COUNT_KEY) || '0', 10);
+
+    if (views >= FREE_LIMIT) {
+        // Limit already reached — lock content and show gate
+        lockedWrapper.classList.add('is-locked');
+        setTimeout(() => {
+            document.getElementById('gateModal')?.classList.add('open');
+        }, 900);
+    } else {
+        // Within free limit — count this view and allow full access
+        if (views === 0) {
+            localStorage.setItem(START_KEY, Date.now()); // start 24 h window
+        }
+        localStorage.setItem(COUNT_KEY, views + 1);
+    }
+
+    // Close modal on X button — content lock stays, modal dismisses
+    document.getElementById('gateModalClose')?.addEventListener('click', () => {
+        document.getElementById('gateModal').classList.remove('open');
+    });
+
+    // Close modal on backdrop click
+    document.getElementById('gateModal')?.addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+            e.currentTarget.classList.remove('open');
+        }
+    });
+})();
+
+// ---- Login form — persist session to localStorage ----
+document.getElementById('loginForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!username || !password) return;
+
+    // Demo account credentials (replaced by real auth on WordPress)
+    const DEMO_USER = 'demo';
+    const DEMO_PASS = 'demo123';
+
+    if (username === DEMO_USER && password === DEMO_PASS) {
+        localStorage.setItem('recipeez_user', username);
+        window.location.href = 'index.html';
+    } else {
+        const form = document.getElementById('loginForm');
+        let err = form.querySelector('.auth-error');
+        if (!err) {
+            err = document.createElement('p');
+            err.className = 'auth-error';
+            err.style.cssText = 'color:#e74c3c;font-size:.875rem;margin-top:-.5rem;margin-bottom:.5rem;';
+            form.querySelector('.auth-submit').before(err);
+        }
+        err.textContent = 'Incorrect username or password.';
+    }
+});
+
+// ---- Register form ----
+document.getElementById('registerForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username  = document.getElementById('reg-username').value.trim();
+    const password  = document.getElementById('reg-password').value;
+    const password2 = document.getElementById('reg-password2').value;
+    const terms     = document.querySelector('#registerForm [name="terms"]');
+
+    const form = document.getElementById('registerForm');
+    let err = form.querySelector('.auth-error');
+    const showErr = (msg) => {
+        if (!err) {
+            err = document.createElement('p');
+            err.className = 'auth-error';
+            err.style.cssText = 'color:#e74c3c;font-size:.875rem;margin-top:-.5rem;margin-bottom:.5rem;';
+            form.querySelector('.auth-submit').before(err);
+        }
+        err.textContent = msg;
+    };
+
+    if (!username) return showErr('Please choose a username.');
+    if (password.length < 8) return showErr('Password must be at least 8 characters.');
+    if (password !== password2) return showErr('Passwords do not match.');
+    if (terms && !terms.checked) return showErr('Please accept the Terms of Use to continue.');
+
+    localStorage.setItem('recipeez_user', username);
+    window.location.href = 'index.html';
+});
+
+// ---- Contact form ----
+document.getElementById('contactForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('[type="submit"]');
+    const original = btn.textContent;
+    btn.textContent = 'Message sent!';
+    btn.disabled = true;
+    e.target.reset();
+    setTimeout(() => {
+        btn.textContent = original;
+        btn.disabled = false;
+    }, 4000);
+});
+
+// ---- Submit recipe — Add / Remove ingredient rows ----
+const ingredientsList = document.getElementById('ingredientsList');
+if (ingredientsList) {
+    document.getElementById('addIngredient').addEventListener('click', () => {
+        const row = document.createElement('div');
+        row.className = 'ingredient-row';
+        row.innerHTML = `<input type="text" class="form-group" style="padding:13px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:.93rem;outline:none;transition:border-color .25s ease;" placeholder="e.g. 1 cup sugar"><button type="button" class="btn-remove" aria-label="Remove">×</button>`;
+        ingredientsList.appendChild(row);
+    });
+
+    ingredientsList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-remove')) {
+            const rows = ingredientsList.querySelectorAll('.ingredient-row');
+            if (rows.length > 1) e.target.closest('.ingredient-row').remove();
+        }
+    });
+}
+
+// ---- Submit recipe — Add / Remove instruction steps ----
+const instructionsList = document.getElementById('instructionsList');
+if (instructionsList) {
+    const updateStepNumbers = () => {
+        instructionsList.querySelectorAll('.step-number').forEach((el, i) => {
+            el.textContent = i + 1;
+        });
+    };
+
+    document.getElementById('addStep').addEventListener('click', () => {
+        const stepNum = instructionsList.querySelectorAll('.instruction-row').length + 1;
+        const row = document.createElement('div');
+        row.className = 'instruction-row';
+        row.style.cssText = 'align-items:flex-start;gap:14px;margin-bottom:12px;';
+        row.innerHTML = `<span class="step-number" style="margin-top:0;flex-shrink:0;">${stepNum}</span><textarea class="form-group" style="flex:1;padding:13px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:.93rem;outline:none;min-height:90px;resize:vertical;transition:border-color .25s ease;" placeholder="Describe this step…"></textarea><button type="button" class="btn-remove" style="margin-top:0;" aria-label="Remove">×</button>`;
+        instructionsList.appendChild(row);
+    });
+
+    instructionsList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-remove')) {
+            const rows = instructionsList.querySelectorAll('.instruction-row');
+            if (rows.length > 1) {
+                e.target.closest('.instruction-row').remove();
+                updateStepNumbers();
+            }
+        }
+    });
+}
+
+// ---- Submit recipe form ----
+document.querySelector('.submit-form-wrap')?.closest('section')?.querySelector('[type="submit"]')
+    ?.addEventListener('click', function (e) {
+        const title  = document.getElementById('recipe-title')?.value.trim();
+        const author = document.getElementById('author-name')?.value.trim();
+        const email  = document.getElementById('author-email')?.value.trim();
+        if (!title || !author || !email) return; // let browser handle required fields
+        e.preventDefault();
+        this.textContent = 'Recipe submitted!';
+        this.disabled = true;
+        setTimeout(() => {
+            this.textContent = 'Submit Your Recipe →';
+            this.disabled = false;
+        }, 4000);
+    });
+
+// ---- Chef hat rating display ----
+(function () {
+    const HAT = "assets/Chef's%20hat.png";
+
+    function hatRow(rating) {
+        let s = '<span class="hat-rating">';
+        for (let i = 1; i <= 5; i++) {
+            const cls = i <= Math.floor(rating) ? 'filled'
+                      : (i === Math.ceil(rating) && rating % 1 >= 0.25) ? 'half'
+                      : 'empty';
+            s += `<img src="${HAT}" class="hat ${cls}" alt="">`;
+        }
+        return s + '</span>';
+    }
+
+    // Full 5-hat display for card ratings
+    document.querySelectorAll('.card-rating').forEach(el => {
+        const m = el.textContent.match(/([\d.]+)\s*\((\d+)\)/);
+        if (!m) return;
+        const rating = parseFloat(m[1]);
+        el.innerHTML = `${hatRow(rating)} ${rating.toFixed(1)} <em>(${m[2]})</em>`;
+    });
+
+    // Single hat for compact spots (sidebar minis + recipe banner meta strip)
+    const singleHat = `<img src="${HAT}" class="hat filled" style="height:0.9em;vertical-align:-0.05em;" alt="">`;
+    document.querySelectorAll('.sidebar-mini-meta').forEach(el => {
+        el.innerHTML = el.innerHTML.replace(/★/g, singleHat);
+    });
+    document.querySelectorAll('.recipe-meta-item').forEach(el => {
+        if (el.textContent.includes('★')) {
+            el.innerHTML = el.innerHTML.replace(/★/g, singleHat);
+        }
+    });
+})();
 
 // ---- Lazy-load images (IntersectionObserver) ----
 if ('IntersectionObserver' in window) {

@@ -184,7 +184,7 @@ h3 { font-size: clamp(1.05rem, 2vw, 1.3rem); }
     gap: 8px;
 }
 
-.nav-logo img { height: 46px; width: auto; }
+.nav-logo img { height: 60px; width: auto; }
 
 .nav-links {
     display: flex;
@@ -572,6 +572,12 @@ h3 { font-size: clamp(1.05rem, 2vw, 1.3rem); }
 /* =============================================================
    RECIPES GRID
    ============================================================= */
+.filter-sort-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
 .filter-row {
     display: flex;
     gap: 8px;
@@ -675,7 +681,11 @@ h3 { font-size: clamp(1.05rem, 2vw, 1.3rem); }
     font-size: 0.8rem;
 }
 .card-rating { color: var(--primary-dark); font-weight: 600; }
-.card-rating em { color: var(--text-faint); font-style: normal; font-weight: 400; }
+.hat-rating { display: inline-flex; align-items: center; gap: 2px; margin-right: 3px; vertical-align: middle; }
+.hat { height: 14px; width: auto; display: inline-block; filter: brightness(0) invert(1) drop-shadow(0 0 0.5px #000) drop-shadow(0 0 0.5px #000); }
+.hat.filled { opacity: 1; }
+.hat.half { opacity: 0.5; }
+.hat.empty { opacity: 0.25; filter: brightness(0) saturate(0%) invert(60%); }.card-rating em { color: var(--text-faint); font-style: normal; font-weight: 400; }
 .card-by { color: var(--text-muted); }
 
 .load-more-wrap { text-align: center; }
@@ -912,7 +922,7 @@ h3 { font-size: clamp(1.05rem, 2vw, 1.3rem); }
     .categories-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
     .featured-body { padding: 28px 24px; }
     .submit-body { padding: 40px 32px; }
-    .filter-row { display: none; }
+    .filter-sort-wrap { display: none; }
     .section-header { align-items: flex-start; }
 }
 
@@ -1257,15 +1267,27 @@ h3 { font-size: clamp(1.05rem, 2vw, 1.3rem); }
 .btn-add-row { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; color: var(--primary); padding: 10px 0; }
 .btn-add-row:hover { opacity: 0.75; }
 .file-upload-area {
-    border: 2px dashed var(--border);
+    border: 1.5px solid var(--border);
     border-radius: var(--radius);
-    padding: 44px; text-align: center;
-    cursor: pointer; transition: all var(--ease);
+    padding: 16px; text-align: center;
+    max-width: 380px;
+    margin: 0 auto;
+    display: block;
+    background: #FFF8F0;
+    cursor: pointer; transition: background var(--ease);
 }
-.file-upload-area:hover { border-color: var(--primary); background: var(--primary-light); }
+.file-upload-area:hover { background: var(--surface2); }
 .file-upload-area input[type="file"] { display: none; }
-.file-upload-area .upload-icon { font-size: 2.4rem; margin-bottom: 10px; }
+.file-upload-area .upload-icon { font-size: 1.6rem; margin-bottom: 6px; }
 .file-upload-area p { font-size: 0.88rem; color: var(--text-muted); }
+.file-upload-area.has-photo { background: #FFF8F0; }
+.upload-placeholder { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.upload-preview { display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+.upload-preview[hidden] { display: none; }
+.upload-preview img { max-height: 260px; max-width: 100%; border-radius: var(--radius-sm); object-fit: cover; box-shadow: 0 2px 12px rgba(0,0,0,.1); }
+.upload-preview-info { display: flex; align-items: center; gap: 12px; font-size: .88rem; color: var(--text-muted); }
+.btn-remove-photo { font-size: .82rem; color: #e74c3c; font-weight: 600; padding: 4px 12px; border-radius: var(--radius-sm); border: 1.5px solid #e74c3c; background: transparent; cursor: pointer; transition: background .2s; }
+.btn-remove-photo:hover { background: #fde8e8; }
 
 /* =============================================================
    AUTH PAGES (login / register)
@@ -1417,4 +1439,126 @@ h3 { font-size: clamp(1.05rem, 2vw, 1.3rem); }
     .about-stats { grid-template-columns: 1fr 1fr; }
     .blog-grid { grid-template-columns: 1fr; }
     .recipe-meta-strip { gap: 14px; }
+}
+
+/* =============================================================
+   LOGIN GATE — Preview fade & modal
+   ============================================================= */
+
+/* Locked content wrapper */
+.recipe-locked-wrapper {
+    position: relative;
+}
+.recipe-locked-wrapper.is-locked .recipe-locked-content {
+    max-height: 260px;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+}
+.recipe-gate-fade {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    background: linear-gradient(to bottom, transparent, var(--bg) 85%);
+    pointer-events: none;
+}
+.recipe-locked-wrapper.is-locked .recipe-gate-fade {
+    display: block;
+}
+
+/* Modal backdrop */
+.gate-modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(28, 20, 9, 0.55);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+.gate-modal-backdrop.open {
+    display: flex;
+}
+.gate-modal-wrapper {
+    position: relative;
+    animation: gateModalIn 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes gateModalIn {
+    from { opacity: 0; transform: scale(0.9) translateY(16px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.gate-modal {
+    background: #fff;
+    border-radius: 24px;
+    padding: 52px 44px 44px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+}
+.gate-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--surface2);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: background var(--ease);
+}
+.gate-modal-close:hover { background: var(--border); }
+.gate-modal-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 22px;
+    font-size: 30px;
+    line-height: 1;
+}
+.gate-modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem;
+    color: var(--text);
+    margin-bottom: 12px;
+}
+.gate-modal p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 28px;
+}
+.gate-modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.gate-modal-actions .btn {
+    width: 100%;
+    justify-content: center;
+}
+.gate-modal-footer {
+    margin-top: 20px;
+    font-size: 0.83rem;
+    color: var(--text-faint);
+}
+@media (max-width: 480px) {
+    .gate-modal { padding: 44px 28px 36px; }
+    .gate-modal-title { font-size: 1.45rem; }
 }

@@ -114,45 +114,45 @@
                 <span class="eyebrow">Browse by type</span>
                 <h2 class="section-title">What Are You Craving?</h2>
             </div>
-            <a href="#" class="link-all">View all categories →</a>
+            <a href="recipes.html" class="link-all">View all categories →</a>
         </div>
         <div class="categories-grid">
-            <a href="#" class="cat-card">
+            <a href="recipes.html" class="cat-card">
                 <div class="cat-img-wrap">
                     <img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=400&q=80" alt="Breakfast">
                 </div>
                 <span class="cat-name">Breakfast</span>
                 <span class="cat-count">142 recipes</span>
             </a>
-            <a href="#" class="cat-card">
+            <a href="recipes.html" class="cat-card">
                 <div class="cat-img-wrap">
                     <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=400&q=80" alt="Lunch">
                 </div>
                 <span class="cat-name">Lunch</span>
                 <span class="cat-count">208 recipes</span>
             </a>
-            <a href="#" class="cat-card">
+            <a href="recipes.html" class="cat-card">
                 <div class="cat-img-wrap">
                     <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=400&q=80" alt="Dinner">
                 </div>
                 <span class="cat-name">Dinner</span>
                 <span class="cat-count">315 recipes</span>
             </a>
-            <a href="#" class="cat-card">
+            <a href="recipes.html" class="cat-card">
                 <div class="cat-img-wrap">
                     <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&q=80" alt="Desserts">
                 </div>
                 <span class="cat-name">Desserts</span>
                 <span class="cat-count">189 recipes</span>
             </a>
-            <a href="#" class="cat-card">
+            <a href="recipes.html" class="cat-card">
                 <div class="cat-img-wrap">
                     <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=400&q=80" alt="Vegan">
                 </div>
                 <span class="cat-name">Vegan</span>
                 <span class="cat-count">97 recipes</span>
             </a>
-            <a href="#" class="cat-card">
+            <a href="recipes.html" class="cat-card">
                 <div class="cat-img-wrap">
                     <img src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=400&q=80" alt="Snacks">
                 </div>
@@ -197,7 +197,7 @@
                 <div class="recipe-info-row">
                     <div class="info-chip"><span>👥</span> Serves 4</div>
                     <div class="info-chip"><span>🔥</span> 340 cal</div>
-                    <div class="info-chip"><span>⭐</span> 4.9 (283)</div>
+                    <div class="info-chip"><img src="assets/Chef's%20hat.png" class="hat filled" style="height:1em;vertical-align:-0.15em;" alt=""> 4.9 (283)</div>
                 </div>
                 <a href="recipe-single.html" class="btn btn-amber btn-lg">View Full Recipe →</a>
             </div>
@@ -215,17 +215,24 @@
                 <span class="eyebrow">Fresh from the kitchen</span>
                 <h2 class="section-title">Latest Recipes</h2>
             </div>
-            <div class="filter-row">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="trending">Trending</button>
-                <button class="filter-btn" data-filter="quick">Quick</button>
-                <button class="filter-btn" data-filter="vegetarian">Vegetarian</button>
+            <div class="filter-sort-wrap">
+                <div class="filter-row">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="trending">Trending</button>
+                    <button class="filter-btn" data-filter="quick">Quick</button>
+                    <button class="filter-btn" data-filter="vegetarian">Vegetarian</button>
+                </div>
+                <select id="recipeSort" aria-label="Sort recipes" style="padding:9px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-family:inherit;font-size:.88rem;font-weight:500;cursor:pointer;outline:none;transition:border-color .25s ease;">
+                    <option value="default">Sort: Newest</option>
+                    <option value="rating">Sort: Top Rated</option>
+                    <option value="time">Sort: Quickest</option>
+                </select>
             </div>
         </div>
 
         <div class="recipes-grid">
 
-            <article class="recipe-card" data-tags="trending breakfast">
+            <article class="recipe-card" data-tags="trending breakfast" data-rating="4.8" data-time="20">
                 <a href="recipe-single.html" class="card-media">
                     <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=80" alt="Fluffy Pancakes">
                     <span class="card-pill card-pill-amber">Trending 🔥</span>
@@ -244,7 +251,7 @@
                 </div>
             </article>
 
-            <article class="recipe-card" data-tags="vegetarian quick">
+            <article class="recipe-card" data-tags="vegetarian quick" data-rating="4.7" data-time="25">
                 <a href="recipe-single.html" class="card-media">
                     <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=600&q=80" alt="Buddha Bowl">
                     <button class="btn-heart" aria-label="Save recipe">♡</button>
@@ -262,7 +269,7 @@
                 </div>
             </article>
 
-            <article class="recipe-card" data-tags="dinner">
+            <article class="recipe-card" data-tags="dinner" data-rating="4.9" data-time="30">
                 <a href="recipe-single.html" class="card-media">
                     <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80" alt="Creamy Lemon Pasta">
                     <span class="card-pill card-pill-green">New ✨</span>
@@ -281,7 +288,7 @@
                 </div>
             </article>
 
-            <article class="recipe-card" data-tags="quick breakfast">
+            <article class="recipe-card" data-tags="quick breakfast" data-rating="4.6" data-time="10">
                 <a href="recipe-single.html" class="card-media">
                     <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=600&q=80" alt="Avocado Toast">
                     <button class="btn-heart" aria-label="Save recipe">♡</button>
@@ -299,7 +306,7 @@
                 </div>
             </article>
 
-            <article class="recipe-card" data-tags="trending">
+            <article class="recipe-card" data-tags="trending" data-rating="5.0" data-time="55">
                 <a href="recipe-single.html" class="card-media">
                     <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=600&q=80" alt="Chocolate Lava Cake">
                     <button class="btn-heart" aria-label="Save recipe">♡</button>
@@ -317,7 +324,7 @@
                 </div>
             </article>
 
-            <article class="recipe-card" data-tags="trending lunch">
+            <article class="recipe-card" data-tags="trending lunch" data-rating="4.8" data-time="40">
                 <a href="recipe-single.html" class="card-media">
                     <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=600&q=80" alt="Smash Burger">
                     <span class="card-pill card-pill-purple">Popular 👑</span>

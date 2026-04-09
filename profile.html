@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog — Recipeez</title>
+    <title>My Profile — Recipeez</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
@@ -64,154 +64,42 @@
         <nav class="breadcrumb">
             <a href="index.html">Home</a>
             <span class="breadcrumb-sep">›</span>
-            <span>Blog</span>
+            <span>My Profile</span>
         </nav>
-        <h1>From Our <em style="color:var(--primary);font-style:italic;">Kitchen</em></h1>
-        <p>Cooking tips, ingredient guides, seasonal inspiration, and stories from food lovers around the world.</p>
+        <h1>My <em style="color:var(--primary);font-style:italic;">Profile</em></h1>
+        <p>Manage your account and settings.</p>
     </div>
 </section>
 
-<!-- BLOG GRID -->
+<!-- PROFILE CONTENT -->
 <section class="section">
     <div class="container">
-        <div class="section-header">
-            <div>
-                <span class="eyebrow">Latest posts</span>
-                <h2 class="section-title">Cooking Inspiration</h2>
+        <div style="max-width:680px;margin:0 auto;">
+
+            <!-- Profile Card -->
+            <div class="recipe-stats-card" style="display:flex;align-items:center;gap:28px;padding:36px;margin-bottom:32px;">
+                <div style="width:80px;height:80px;border-radius:50%;background:var(--primary-light);border:3px solid var(--primary);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;">
+                    👤
+                </div>
+                <div>
+                    <p style="font-size:.8rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">Logged in as</p>
+                    <p id="profileUsername" style="font-size:1.4rem;font-weight:600;font-family:'Playfair Display',serif;">—</p>
+                    <p style="font-size:.875rem;color:var(--text-muted);margin-top:2px;">Member · Recipeez</p>
+                </div>
             </div>
-            <div class="filter-row">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="tips">Tips &amp; Tricks</button>
-                <button class="filter-btn" data-filter="ingredients">Ingredients</button>
-                <button class="filter-btn" data-filter="seasonal">Seasonal</button>
-                <button class="filter-btn" data-filter="stories">Stories</button>
+
+            <!-- Account Actions -->
+            <div class="recipe-stats-card" style="padding:32px;margin-bottom:32px;">
+                <h2 style="font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:20px;">Account</h2>
+                <div style="display:flex;flex-direction:column;gap:14px;">
+                    <a href="submit-recipe.html" class="btn btn-outline" style="text-align:center;">Submit a Recipe</a>
+                    <a href="recipes.html" class="btn btn-outline" style="text-align:center;">Browse Recipes</a>
+                    <button id="logoutBtn" class="btn" style="background:#fef0f0;color:#c0392b;border:1.5px solid #f5c6c6;border-radius:var(--radius-sm);padding:12px 20px;font-size:.9rem;font-weight:500;transition:background var(--ease);">
+                        Log Out
+                    </button>
+                </div>
             </div>
-        </div>
 
-        <div class="blog-grid">
-
-            <article class="blog-card" data-tags="tips">
-                <a href="#" class="blog-card-media">
-                    <img src="https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=700&q=80" alt="Knife skills">
-                </a>
-                <div class="blog-card-body">
-                    <div class="blog-card-meta">
-                        <span>🗓 March 18, 2025</span>
-                        <span>⏱ 5 min read</span>
-                    </div>
-                    <h3><a href="#">10 Knife Skills Every Home Cook Should Master</a></h3>
-                    <p>Sharp knives and proper technique can transform your cooking speed and confidence. Here are the foundational cuts every cook needs to know.</p>
-                    <div class="blog-card-foot">
-                        <a href="#" class="read-more">Read More →</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="blog-card" data-tags="tips">
-                <a href="#" class="blog-card-media">
-                    <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=700&q=80" alt="Meal prep">
-                </a>
-                <div class="blog-card-body">
-                    <div class="blog-card-meta">
-                        <span>🗓 March 12, 2025</span>
-                        <span>⏱ 7 min read</span>
-                    </div>
-                    <h3><a href="#">The Ultimate Beginner's Guide to Meal Prep</a></h3>
-                    <p>Save time, reduce food waste, and eat better all week long. We break down exactly how to plan, batch cook, and store your meals like a pro.</p>
-                    <div class="blog-card-foot">
-                        <a href="#" class="read-more">Read More →</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="blog-card" data-tags="ingredients">
-                <a href="#" class="blog-card-media">
-                    <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=700&q=80" alt="Spices">
-                </a>
-                <div class="blog-card-body">
-                    <div class="blog-card-meta">
-                        <span>🗓 March 5, 2025</span>
-                        <span>⏱ 4 min read</span>
-                    </div>
-                    <h3><a href="#">How to Build the Perfect Spice Pantry from Scratch</a></h3>
-                    <p>You don't need 50 spices to cook amazing food. This guide tells you exactly which 12 to buy first and how to use every one of them.</p>
-                    <div class="blog-card-foot">
-                        <a href="#" class="read-more">Read More →</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="blog-card" data-tags="seasonal">
-                <a href="#" class="blog-card-media">
-                    <img src="https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?auto=format&fit=crop&w=700&q=80" alt="Seasonal vegetables">
-                </a>
-                <div class="blog-card-body">
-                    <div class="blog-card-meta">
-                        <span>🗓 Feb 28, 2025</span>
-                        <span>⏱ 6 min read</span>
-                    </div>
-                    <h3><a href="#">Eating Seasonally: Why It Matters and How to Start</a></h3>
-                    <p>Seasonal produce tastes better, costs less, and is kinder to the planet. Here's a month-by-month guide to what's fresh and delicious right now.</p>
-                    <div class="blog-card-foot">
-                        <a href="#" class="read-more">Read More →</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="blog-card" data-tags="stories">
-                <a href="#" class="blog-card-media">
-                    <img src="https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?auto=format&fit=crop&w=700&q=80" alt="Baking bread">
-                </a>
-                <div class="blog-card-body">
-                    <div class="blog-card-meta">
-                        <span>🗓 Feb 20, 2025</span>
-                        <span>⏱ 8 min read</span>
-                    </div>
-                    <h3><a href="#">Baking Your First Sourdough: A Beginner's Journey</a></h3>
-                    <p>From feeding your starter to that first perfect loaf — an honest, practical guide that covers everything first-time sourdough bakers need to know.</p>
-                    <div class="blog-card-foot">
-                        <a href="#" class="read-more">Read More →</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="blog-card" data-tags="tips">
-                <a href="#" class="blog-card-media">
-                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=700&q=80" alt="Healthy eating">
-                </a>
-                <div class="blog-card-body">
-                    <div class="blog-card-meta">
-                        <span>🗓 Feb 14, 2025</span>
-                        <span>⏱ 5 min read</span>
-                    </div>
-                    <h3><a href="#">5 Simple Swaps That Make Any Meal Healthier</a></h3>
-                    <p>Small changes add up. These straightforward substitutions help you cut calories and boost nutrition without sacrificing any of the flavour.</p>
-                    <div class="blog-card-foot">
-                        <a href="#" class="read-more">Read More →</a>
-                    </div>
-                </div>
-            </article>
-
-        </div>
-
-        <div class="load-more-wrap" style="margin-top:52px;">
-            <a href="#" class="btn btn-outline">Load More Articles</a>
-        </div>
-    </div>
-</section>
-
-<!-- NEWSLETTER -->
-<section class="newsletter-section">
-    <div class="container">
-        <div class="newsletter-inner">
-            <div class="newsletter-icon">🍯</div>
-            <h2 class="newsletter-title">Fresh Recipes, Every Week</h2>
-            <p class="newsletter-desc">Get handpicked recipes and cooking tips delivered straight to your inbox — no spam, only good food.</p>
-            <form class="newsletter-form" id="newsletterForm">
-                <input type="email" placeholder="your@email.com" class="newsletter-input" required>
-                <button type="submit" class="btn btn-amber">Subscribe Free</button>
-            </form>
-            <p class="newsletter-note">Join 18,000+ food lovers · Unsubscribe anytime</p>
         </div>
     </div>
 </section>
@@ -278,5 +166,21 @@
 </footer>
 
 <script src="js/main.js"></script>
+<script>
+    // Redirect to login if not logged in
+    const user = localStorage.getItem('recipeez_user');
+    if (!user) {
+        window.location.href = 'login.html';
+    } else {
+        document.getElementById('profileUsername').textContent = user;
+    }
+
+    // Log out
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('recipeez_user');
+        localStorage.removeItem('recipeez_free_views');
+        window.location.href = 'index.html';
+    });
+</script>
 </body>
 </html>
