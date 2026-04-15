@@ -412,20 +412,25 @@ if (instructionsList) {
 }
 
 // ---- Submit recipe form ----
-document.querySelector('.submit-form-wrap')?.closest('section')?.querySelector('[type="submit"]')
-    ?.addEventListener('click', function (e) {
-        const title  = document.getElementById('recipe-title')?.value.trim();
-        const author = document.getElementById('author-name')?.value.trim();
-        const email  = document.getElementById('author-email')?.value.trim();
-        if (!title || !author || !email) return; // let browser handle required fields
-        e.preventDefault();
-        this.textContent = 'Recipe submitted!';
-        this.disabled = true;
-        setTimeout(() => {
-            this.textContent = 'Submit Your Recipe →';
-            this.disabled = false;
-        }, 4000);
-    });
+(function () {
+    if (!document.querySelector('.submit-form-wrap')) return;
+    if (!localStorage.getItem('recipeez_user')) {
+        window.location.href = 'login.html';
+        return;
+    }
+    document.querySelector('.submit-form-wrap').closest('section').querySelector('[type="submit"]')
+        ?.addEventListener('click', function (e) {
+            const title = document.getElementById('recipe-title')?.value.trim();
+            if (!title) return; // let browser handle required fields
+            e.preventDefault();
+            this.textContent = 'Recipe submitted!';
+            this.disabled = true;
+            setTimeout(() => {
+                this.textContent = 'Submit Your Recipe →';
+                this.disabled = false;
+            }, 4000);
+        });
+})();
 
 // ---- Chef hat rating display ----
 (function () {
