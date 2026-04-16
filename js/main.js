@@ -9,11 +9,12 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // ---- Nav auth state — swap Log In ↔ Profile ----
-(function () {
-    const user = localStorage.getItem('recipeez_user');
+(async function () {
+    if (!window.sb) return;
+    const { data: { session } } = await sb.auth.getSession();
     const loginBtn = document.querySelector('.nav-actions a[href="login.html"]');
     if (!loginBtn) return;
-    if (user) {
+    if (session) {
         loginBtn.href = 'profile.html';
         loginBtn.textContent = 'Profile';
     }
@@ -246,11 +247,17 @@ if (photoInput) {
 }
 
 // ---- Login gate — 3 free recipe views per 24 h, then prompt to subscribe ----
-(function () {
+(async function () {
     const lockedWrapper = document.querySelector('.recipe-locked-wrapper');
     if (!lockedWrapper) return; // not a recipe page
 
-    const isLoggedIn = !!localStorage.getItem('recipeez_user');
+    let isLoggedIn = false;
+    if (window.sb) {
+        const { data: { session } } = await sb.auth.getSession();
+        isLoggedIn = !!session;
+    } else {
+        isLoggedIn = !!localStorage.getItem('recipeez_user');
+    }
     if (isLoggedIn) return; // logged-in users see everything
 
     const FREE_LIMIT = 3;
@@ -294,36 +301,49 @@ if (photoInput) {
     });
 })();
 
-// ---- Login form — persist session to localStorage ----
-document.getElementById('loginForm')?.addEventListener('submit', (e) => {
+// ---- Login form — Supabase auth ----
+document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const username = document.getElementById('login-username').value.trim();
+    const email    = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
-    if (!username || !password) return;
+    if (!email || !password) return;
 
-    // Demo account credentials (replaced by real auth on WordPress)
-    const DEMO_USER = 'demo';
-    const DEMO_PASS = 'demo123';
+    const btn = document.querySelector('#loginForm .auth-submit');
+    btn.textContent = 'Logging in…';
+    btn.disabled = true;
 
-    if (username === DEMO_USER && password === DEMO_PASS) {
-        localStorage.setItem('recipeez_user', username);
-        window.location.href = 'index.html';
-    } else {
-        const form = document.getElementById('loginForm');
-        let err = form.querySelector('.auth-error');
+    const form = document.getElementById('loginForm');
+    let err = form.querySelector('.auth-error');
+    const showErr = (msg) => {
         if (!err) {
             err = document.createElement('p');
             err.className = 'auth-error';
             err.style.cssText = 'color:#e74c3c;font-size:.875rem;margin-top:-.5rem;margin-bottom:.5rem;';
             form.querySelector('.auth-submit').before(err);
         }
-        err.textContent = 'Incorrect username or password.';
+        err.textContent = msg;
+        btn.textContent = 'Log In';
+        btn.disabled = false;
+    };
+
+    if (!window.sb) return showErr('Auth service unavailable. Please refresh and try again.');
+
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) {
+        showErr(error.message === 'Invalid login credentials'
+            ? 'Incorrect email or password.'
+            : error.message);
+    } else {
+        window.location.href = 'index.html';
     }
 });
 
-// ---- Register form ----
-document.getElementById('registerForm')?.addEventListener('submit', (e) => {
+// ---- Register form — Supabase auth ----
+document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const firstName = document.getElementById('reg-first-name').value.trim();
+    const lastName  = document.getElementById('reg-last-name').value.trim();
+    const email     = document.getElementById('reg-email').value.trim();
     const username  = document.getElementById('reg-username').value.trim();
     const password  = document.getElementById('reg-password').value;
     const password2 = document.getElementById('reg-password2').value;
@@ -341,13 +361,35 @@ document.getElementById('registerForm')?.addEventListener('submit', (e) => {
         err.textContent = msg;
     };
 
-    if (!username) return showErr('Please choose a username.');
-    if (password.length < 8) return showErr('Password must be at least 8 characters.');
-    if (password !== password2) return showErr('Passwords do not match.');
+    if (!firstName)              return showErr('Please enter your first name.');
+    if (!username)               return showErr('Please choose a username.');
+    if (password.length < 8)     return showErr('Password must be at least 8 characters.');
+    if (password !== password2)  return showErr('Passwords do not match.');
     if (terms && !terms.checked) return showErr('Please accept the Terms of Use to continue.');
 
-    localStorage.setItem('recipeez_user', username);
-    window.location.href = 'index.html';
+    if (!window.sb) return showErr('Auth service unavailable. Please refresh and try again.');
+
+    const btn = form.querySelector('.auth-submit');
+    btn.textContent = 'Creating account…';
+    btn.disabled = true;
+
+    const { error } = await sb.auth.signUp({
+        email,
+        password,
+        options: { data: { first_name: firstName, last_name: lastName, username } }
+    });
+
+    if (error) {
+        btn.textContent = 'Create Account';
+        btn.disabled = false;
+        showErr(error.message);
+    } else {
+        btn.textContent = 'Account created!';
+        const ok = document.createElement('p');
+        ok.style.cssText = 'color:#27ae60;font-size:.875rem;margin-top:.5rem;text-align:center;';
+        ok.textContent = 'Check your email to confirm your account, then log in.';
+        btn.after(ok);
+    }
 });
 
 // ---- Contact form ----
@@ -414,22 +456,32 @@ if (instructionsList) {
 // ---- Submit recipe form ----
 (function () {
     if (!document.querySelector('.submit-form-wrap')) return;
-    if (!localStorage.getItem('recipeez_user')) {
-        window.location.href = 'login.html';
-        return;
+
+    async function checkAuth() {
+        let loggedIn = false;
+        if (window.sb) {
+            const { data: { session } } = await sb.auth.getSession();
+            loggedIn = !!session;
+        } else {
+            loggedIn = !!localStorage.getItem('recipeez_user');
+        }
+        if (!loggedIn) { window.location.href = 'login.html'; return; }
+
+        document.querySelector('.submit-form-wrap').closest('section').querySelector('[type="submit"]')
+            ?.addEventListener('click', function (e) {
+                const title = document.getElementById('recipe-title')?.value.trim();
+                if (!title) return;
+                e.preventDefault();
+                this.textContent = 'Recipe submitted!';
+                this.disabled = true;
+                setTimeout(() => {
+                    this.textContent = 'Submit Your Recipe →';
+                    this.disabled = false;
+                }, 4000);
+            });
     }
-    document.querySelector('.submit-form-wrap').closest('section').querySelector('[type="submit"]')
-        ?.addEventListener('click', function (e) {
-            const title = document.getElementById('recipe-title')?.value.trim();
-            if (!title) return; // let browser handle required fields
-            e.preventDefault();
-            this.textContent = 'Recipe submitted!';
-            this.disabled = true;
-            setTimeout(() => {
-                this.textContent = 'Submit Your Recipe →';
-                this.disabled = false;
-            }, 4000);
-        });
+
+    checkAuth();
 })();
 
 // ---- Chef hat rating display ----

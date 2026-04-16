@@ -86,8 +86,8 @@
             <form class="auth-form" id="loginForm" novalidate>
 
                 <div class="form-group">
-                    <label for="login-username">Username or Email</label>
-                    <input type="text" id="login-username" name="username" placeholder="yourusername" required autocomplete="username">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" name="email" placeholder="jane@email.com" required autocomplete="email">
                 </div>
 
                 <div class="form-group">
@@ -128,6 +128,8 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-client.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

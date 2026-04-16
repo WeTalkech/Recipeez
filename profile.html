@@ -165,22 +165,34 @@
     </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-client.js"></script>
 <script src="js/main.js"></script>
 <script>
-    // Redirect to login if not logged in
-    const user = localStorage.getItem('recipeez_user');
-    if (!user) {
-        window.location.href = 'login.html';
-    } else {
-        document.getElementById('profileUsername').textContent = user;
-    }
+    (async function () {
+        if (!window.sb) {
+            const user = localStorage.getItem('recipeez_user');
+            if (!user) { window.location.href = 'login.html'; return; }
+            document.getElementById('profileUsername').textContent = user;
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('recipeez_user');
+                window.location.href = 'index.html';
+            });
+            return;
+        }
 
-    // Log out
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        localStorage.removeItem('recipeez_user');
-        localStorage.removeItem('recipeez_free_views');
-        window.location.href = 'index.html';
-    });
+        const { data: { session } } = await sb.auth.getSession();
+        if (!session) { window.location.href = 'login.html'; return; }
+
+        const meta = session.user.user_metadata;
+        document.getElementById('profileUsername').textContent =
+            meta?.username || meta?.first_name || session.user.email;
+
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await sb.auth.signOut();
+            window.location.href = 'index.html';
+        });
+    })();
 </script>
 </body>
 </html>
