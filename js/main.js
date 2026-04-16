@@ -453,35 +453,142 @@ if (instructionsList) {
     });
 }
 
-// ---- Submit recipe form ----
+// ---- Submit recipe form — save to Supabase ----
 (function () {
     if (!document.querySelector('.submit-form-wrap')) return;
 
     async function checkAuth() {
-        let loggedIn = false;
+        let session = null;
         if (window.sb) {
-            const { data: { session } } = await sb.auth.getSession();
-            loggedIn = !!session;
-        } else {
-            loggedIn = !!localStorage.getItem('recipeez_user');
+            const { data } = await sb.auth.getSession();
+            session = data.session;
         }
-        if (!loggedIn) { window.location.href = 'login.html'; return; }
+        if (!session) { window.location.href = 'login.html'; return; }
 
-        document.querySelector('.submit-form-wrap').closest('section').querySelector('[type="submit"]')
-            ?.addEventListener('click', function (e) {
-                const title = document.getElementById('recipe-title')?.value.trim();
-                if (!title) return;
-                e.preventDefault();
-                this.textContent = 'Recipe submitted!';
-                this.disabled = true;
-                setTimeout(() => {
-                    this.textContent = 'Submit Your Recipe →';
-                    this.disabled = false;
-                }, 4000);
+        const submitBtn = document.querySelector('.submit-form-wrap').closest('section').querySelector('[type="submit"]');
+        if (!submitBtn) return;
+
+        submitBtn.addEventListener('click', async function (e) {
+            e.preventDefault();
+
+            const title       = document.getElementById('recipe-title')?.value.trim();
+            const category    = document.getElementById('recipe-category')?.value;
+            const description = document.getElementById('recipe-description')?.value.trim();
+
+            if (!title)       { alert('Please enter a recipe title.'); return; }
+            if (!category)    { alert('Please select a category.'); return; }
+            if (!description) { alert('Please add a description.'); return; }
+
+            const ingredients  = Array.from(document.querySelectorAll('#ingredientsList .ingredient-row input'))
+                                      .map(i => i.value.trim()).filter(Boolean);
+            const instructions = Array.from(document.querySelectorAll('#instructionsList .instruction-row textarea'))
+                                      .map(t => t.value.trim()).filter(Boolean);
+
+            this.textContent = 'Submitting…';
+            this.disabled = true;
+
+            // Upload photo if provided
+            let photoUrl = null;
+            const photoFile = document.getElementById('recipe-photo')?.files[0];
+            if (photoFile) {
+                const ext  = photoFile.name.split('.').pop();
+                const path = `${session.user.id}/${Date.now()}.${ext}`;
+                const { error: upErr } = await sb.storage.from('recipe-photos').upload(path, photoFile);
+                if (!upErr) {
+                    const { data: urlData } = sb.storage.from('recipe-photos').getPublicUrl(path);
+                    photoUrl = urlData.publicUrl;
+                }
+            }
+
+            const { error } = await sb.from('recipes').insert({
+                user_id:     session.user.id,
+                title,
+                category,
+                cuisine:     document.getElementById('recipe-cuisine')?.value.trim()    || null,
+                difficulty:  document.getElementById('recipe-difficulty')?.value        || null,
+                servings:    parseInt(document.getElementById('recipe-servings')?.value) || null,
+                prep_time:   parseInt(document.getElementById('recipe-prep')?.value)     || null,
+                cook_time:   parseInt(document.getElementById('recipe-cook')?.value)     || null,
+                description,
+                ingredients,
+                instructions,
+                photo_url:   photoUrl,
+                status:      'pending'
             });
+
+            if (error) {
+                this.textContent = 'Submit Your Recipe →';
+                this.disabled = false;
+                alert('Submission failed: ' + error.message);
+            } else {
+                document.querySelector('.submit-form-wrap').innerHTML = `
+                    <div style="text-align:center;padding:60px 20px;">
+                        <div style="font-size:3rem;margin-bottom:16px;">🎉</div>
+                        <h2 style="font-family:'Playfair Display',serif;margin-bottom:12px;">Recipe Submitted!</h2>
+                        <p style="color:var(--text-muted);max-width:400px;margin:0 auto 28px;">
+                            Your recipe is under review. We'll publish it within 3 business days.
+                        </p>
+                        <a href="index.html" class="btn btn-amber">Back to Home</a>
+                    </div>`;
+            }
+        });
     }
 
     checkAuth();
+})();
+
+// ---- Load recipes from Supabase ----
+(async function () {
+    const grid = document.querySelector('.recipes-grid');
+    if (!grid || !window.sb) return;
+
+    const { data: recipes, error } = await sb
+        .from('recipes')
+        .select('id, title, category, description, photo_url, prep_time, cook_time, difficulty, created_at')
+        .eq('status', 'published')
+        .order('created_at', { ascending: false })
+        .limit(12);
+
+    if (error || !recipes?.length) {
+        grid.innerHTML = '<p style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:60px 0;">No recipes yet — be the first to <a href="submit-recipe.html" style="color:var(--primary);">submit one!</a></p>';
+        return;
+    }
+
+    grid.innerHTML = recipes.map(r => {
+        const totalTime = (r.prep_time || 0) + (r.cook_time || 0);
+        const img = r.photo_url || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80';
+        const desc = r.description ? (r.description.length > 90 ? r.description.slice(0, 90) + '…' : r.description) : '';
+        return `
+            <a href="recipe-single.html?id=${r.id}" class="recipe-card">
+                <div class="card-img-wrap">
+                    <img src="${img}" alt="${r.title}" loading="lazy">
+                    <button class="btn-heart" aria-label="Save recipe">♡</button>
+                </div>
+                <div class="card-body">
+                    <div class="card-tags">
+                        <span class="tag">${r.category || 'Recipe'}</span>
+                        ${r.difficulty ? `<span class="tag tag-${r.difficulty.toLowerCase()}">${r.difficulty}</span>` : ''}
+                    </div>
+                    <h3 class="card-title">${r.title}</h3>
+                    <p class="card-desc">${desc}</p>
+                    <div class="card-footer">
+                        ${totalTime ? `<span class="card-time"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${totalTime} min</span>` : ''}
+                    </div>
+                </div>
+            </a>`;
+    }).join('');
+
+    // Re-attach heart listeners on dynamically added cards
+    grid.querySelectorAll('.btn-heart').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault(); e.stopPropagation();
+            const saved = btn.classList.toggle('saved');
+            btn.textContent = saved ? '♥' : '♡';
+            btn.style.color = saved ? '#e74c3c' : '';
+            btn.style.transform = 'scale(1.3)';
+            setTimeout(() => btn.style.transform = '', 200);
+        });
+    });
 })();
 
 // ---- Chef hat rating display ----
