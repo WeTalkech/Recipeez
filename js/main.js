@@ -591,6 +591,86 @@ if (instructionsList) {
     });
 })();
 
+// ---- Recipe single page — load from Supabase ----
+(async function () {
+    if (!document.querySelector('.recipe-banner')) return;
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (!id || !window.sb) return;
+
+    const { data: r, error } = await sb
+        .from('recipes')
+        .select('*, profiles(username, first_name)')
+        .eq('id', id)
+        .eq('status', 'published')
+        .single();
+
+    if (error || !r) return;
+
+    // Page title & breadcrumb
+    document.title = `${r.title} — Recipeez`;
+    const crumbs = document.querySelectorAll('.recipe-banner-content .breadcrumb span');
+    if (crumbs.length) crumbs[crumbs.length - 1].textContent = r.title;
+
+    // Banner image
+    if (r.photo_url) {
+        const bannerImg = document.querySelector('.recipe-banner > img');
+        if (bannerImg) { bannerImg.src = r.photo_url; bannerImg.alt = r.title; }
+    }
+
+    // Tags
+    const tagRow = document.querySelector('.tag-row');
+    if (tagRow) tagRow.innerHTML = `
+        <span class="tag" style="background:rgba(255,255,255,0.15);color:#fff;">${r.category || ''}</span>
+        ${r.difficulty ? `<span class="tag tag-${r.difficulty.toLowerCase()}">${r.difficulty}</span>` : ''}`;
+
+    // Title
+    const bannerTitle = document.querySelector('.recipe-banner-title');
+    if (bannerTitle) bannerTitle.textContent = r.title;
+
+    // Meta strip
+    const metaItems = document.querySelectorAll('.recipe-meta-item span');
+    if (metaItems[0]) metaItems[0].innerHTML = `Prep: <strong>${r.prep_time ? r.prep_time + ' min' : '—'}</strong>`;
+    if (metaItems[1]) metaItems[1].innerHTML = `Cook: <strong>${r.cook_time ? r.cook_time + ' min' : '—'}</strong>`;
+    if (metaItems[2]) metaItems[2].innerHTML = `Serves: <strong>${r.servings || '—'}</strong>`;
+
+    // Stats card
+    const statVals = document.querySelectorAll('.recipe-stat-value');
+    if (statVals[0]) statVals[0].textContent = r.prep_time ? `${r.prep_time} min` : '—';
+    if (statVals[1]) statVals[1].textContent = r.cook_time ? `${r.cook_time} min` : '—';
+    if (statVals[2]) statVals[2].textContent = r.servings || '—';
+    if (statVals[3]) statVals[3].textContent = r.difficulty || '—';
+
+    // Description
+    const desc = document.querySelector('.recipe-description');
+    if (desc) desc.textContent = r.description;
+
+    // Ingredients
+    const ingList = document.querySelector('.ingredients-list');
+    if (ingList && r.ingredients?.length) {
+        ingList.innerHTML = r.ingredients.map(ing =>
+            `<div class="ingredient-item"><div class="ingredient-check"></div> ${ing}</div>`
+        ).join('');
+    }
+
+    // Instructions
+    const insList = document.querySelector('.instructions-list');
+    if (insList && r.instructions?.length) {
+        insList.innerHTML = r.instructions.map((step, i) =>
+            `<div class="instruction-step">
+                <div class="step-number">${i + 1}</div>
+                <div class="step-content"><p>${step}</p></div>
+            </div>`
+        ).join('');
+    }
+
+    // Author
+    const authorName = document.querySelector('.author-name');
+    if (authorName) {
+        const username = r.profiles?.username || r.profiles?.first_name || 'Anonymous';
+        authorName.textContent = `@${username}`;
+    }
+})();
+
 // ---- Chef hat rating display ----
 (function () {
     const HAT = "assets/Chef's%20hat.png";
