@@ -23,29 +23,37 @@ window.addEventListener('scroll', () => {
 // ---- Mobile nav toggle ----
 const navToggle = document.getElementById('navToggle');
 const navLinks  = document.getElementById('navLinks');
+const navEl     = document.querySelector('.nav');
+
+function openNav() {
+    navLinks.classList.add('open');
+    navToggle.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    navToggle.setAttribute('aria-label', 'Close menu');
+    // Move navLinks to body so it escapes the header's stacking context
+    document.body.appendChild(navLinks);
+}
+
+function closeNav() {
+    navLinks.classList.remove('open');
+    navToggle.classList.remove('open');
+    document.body.style.overflow = '';
+    navToggle.setAttribute('aria-label', 'Open menu');
+    // Move navLinks back into the nav for desktop layout
+    const navActions = document.querySelector('.nav-actions');
+    navEl.insertBefore(navLinks, navActions);
+}
 
 navToggle.addEventListener('click', () => {
-    const isOpen = navLinks.classList.toggle('open');
-    navToggle.classList.toggle('open', isOpen);
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-    navToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    navLinks.classList.contains('open') ? closeNav() : openNav();
 });
 
 // Close nav on link click (mobile) - but not for dropdown triggers
 navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', (e) => {
-        // Don't close menu if clicking within a dropdown
-        if (link.closest('.dropdown')) {
-            return;
-        }
-        // Don't close menu if clicking the dropdown trigger
-        if (link.closest('.has-dropdown')) {
-            e.preventDefault();
-            return;
-        }
-        navLinks.classList.remove('open');
-        navToggle.classList.remove('open');
-        document.body.style.overflow = '';
+        if (link.closest('.dropdown')) return;
+        if (link.closest('.has-dropdown')) { e.preventDefault(); return; }
+        closeNav();
     });
 });
 
@@ -54,9 +62,7 @@ document.addEventListener('click', (e) => {
     if (navLinks.classList.contains('open') &&
         !navLinks.contains(e.target) &&
         !navToggle.contains(e.target)) {
-        navLinks.classList.remove('open');
-        navToggle.classList.remove('open');
-        document.body.style.overflow = '';
+        closeNav();
     }
 });
 
@@ -105,9 +111,7 @@ document.getElementById('searchForm').addEventListener('submit', (e) => {
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         searchPanel.classList.remove('open');
-        navLinks.classList.remove('open');
-        navToggle.classList.remove('open');
-        document.body.style.overflow = '';
+        if (navLinks.classList.contains('open')) closeNav();
         document.getElementById('gateModal')?.classList.remove('open');
     }
 });
@@ -247,6 +251,8 @@ if (photoInput) {
 }
 
 // ---- Login gate — 3 free recipe views per 24 h, then prompt to subscribe ----
+// DISABLED: all users have full access for now — re-enable when ready
+/*
 (async function () {
     const lockedWrapper = document.querySelector('.recipe-locked-wrapper');
     if (!lockedWrapper) return; // not a recipe page
@@ -299,6 +305,17 @@ if (photoInput) {
             e.currentTarget.classList.remove('open');
         }
     });
+})();
+*/
+
+// ---- Show confirmation nudge when arriving from registration ----
+(function () {
+    if (!document.getElementById('loginForm')) return;
+    if (new URLSearchParams(window.location.search).get('registered') !== '1') return;
+    const notice = document.createElement('p');
+    notice.style.cssText = 'background:#f0fdf4;border:1px solid #86efac;color:#166534;font-size:.9rem;padding:12px 16px;border-radius:8px;margin-bottom:16px;text-align:center;';
+    notice.textContent = '✅ Account created! Check your email to confirm, then log in below.';
+    document.getElementById('loginForm').prepend(notice);
 })();
 
 // ---- Login form — Supabase auth ----
@@ -376,7 +393,10 @@ document.getElementById('registerForm')?.addEventListener('submit', async (e) =>
     const { error } = await sb.auth.signUp({
         email,
         password,
-        options: { data: { first_name: firstName, last_name: lastName, username } }
+        options: {
+            data: { first_name: firstName, last_name: lastName, username },
+            emailRedirectTo: window.location.origin + '/welcome.html'
+        }
     });
 
     if (error) {
@@ -384,11 +404,8 @@ document.getElementById('registerForm')?.addEventListener('submit', async (e) =>
         btn.disabled = false;
         showErr(error.message);
     } else {
-        btn.textContent = 'Account created!';
-        const ok = document.createElement('p');
-        ok.style.cssText = 'color:#27ae60;font-size:.875rem;margin-top:.5rem;text-align:center;';
-        ok.textContent = 'Check your email to confirm your account, then log in.';
-        btn.after(ok);
+        btn.textContent = 'Account created! Redirecting…';
+        setTimeout(() => { window.location.href = 'login.html?registered=1'; }, 1500);
     }
 });
 
@@ -464,6 +481,8 @@ if (instructionsList) {
             session = data.session;
         }
         if (!session) { window.location.href = 'login.html'; return; }
+
+        document.getElementById('submitSection').style.visibility = '';
 
         const submitBtn = document.querySelector('.submit-form-wrap').closest('section').querySelector('[type="submit"]');
         if (!submitBtn) return;
@@ -665,9 +684,11 @@ if (instructionsList) {
 
     // Author
     const authorName = document.querySelector('.author-name');
+    const authorAvatar = document.getElementById('authorAvatar');
     if (authorName) {
         const username = r.profiles?.username || r.profiles?.first_name || 'Anonymous';
         authorName.textContent = `@${username}`;
+        if (authorAvatar) authorAvatar.textContent = username.charAt(0).toUpperCase();
     }
 })();
 

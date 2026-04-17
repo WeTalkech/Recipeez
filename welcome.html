@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Recipeez!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .welcome-layout {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fff9f0 0%, #fff3e0 100%);
+            padding: 40px 20px;
+        }
+
+        .welcome-card {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 8px 48px rgba(0,0,0,0.10);
+            max-width: 520px;
+            width: 100%;
+            padding: 56px 48px 48px;
+            text-align: center;
+        }
+
+        .welcome-logo {
+            margin-bottom: 32px;
+        }
+
+        .welcome-logo img {
+            height: 48px;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+            animation: pop 0.5s cubic-bezier(.175,.885,.32,1.275) both;
+        }
+
+        @keyframes pop {
+            from { transform: scale(0.5); opacity: 0; }
+            to   { transform: scale(1);   opacity: 1; }
+        }
+
+        .welcome-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text, #1a1a1a);
+            margin-bottom: 14px;
+            line-height: 1.2;
+        }
+
+        .welcome-subtitle {
+            color: var(--text-muted, #666);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 36px;
+        }
+
+        .welcome-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .welcome-divider {
+            font-size: 0.85rem;
+            color: var(--text-muted, #999);
+            margin: 4px 0;
+        }
+
+        @media (max-width: 560px) {
+            .welcome-card { padding: 40px 24px 36px; }
+            .welcome-title { font-size: 1.65rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="welcome-layout">
+    <div class="welcome-card">
+
+        <div class="welcome-logo">
+            <a href="index.html">
+                <img src="logo/logo.png" alt="Recipeez">
+            </a>
+        </div>
+
+        <span class="welcome-icon">🎉</span>
+
+        <h1 class="welcome-title">You're in! Welcome to Recipeez</h1>
+
+        <p class="welcome-subtitle" id="welcomeMsg">
+            Your email has been confirmed. You're now part of a community of passionate home cooks — ready to discover, share, and savour every bite.
+        </p>
+
+        <div class="welcome-actions">
+            <a href="login.html" class="btn btn-amber btn-lg">Log In &amp; Start Cooking →</a>
+            <span class="welcome-divider">or</span>
+            <a href="recipes.html" class="btn btn-outline btn-lg">Browse Recipes</a>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-client.js"></script>
+<script>
+(async function () {
+    if (!window.sb) return;
+
+    // Supabase drops the session into the URL hash after email confirmation
+    const hash = new URLSearchParams(window.location.hash.slice(1));
+    if (hash.get('type') !== 'signup') return;
+
+    // Let Supabase process the hash and establish a session
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return;
+
+    const name = session.user.user_metadata?.first_name || session.user.email.split('@')[0];
+    document.getElementById('welcomeMsg').textContent =
+        `Hey ${name}! Your email is confirmed and your account is all set. You're now part of a community of passionate home cooks — ready to discover, share, and savour every bite.`;
+
+    // Already logged in — swap the login button to go straight to profile
+    const loginBtn = document.querySelector('.welcome-actions a[href="login.html"]');
+    if (loginBtn) {
+        loginBtn.href = 'profile.html';
+        loginBtn.textContent = 'Go to My Profile →';
+    }
+})();
+</script>
+</body>
+</html>
