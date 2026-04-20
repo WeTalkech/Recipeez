@@ -1277,6 +1277,15 @@ h3 { font-size: clamp(1.05rem, 2vw, 1.3rem); }
 .btn-remove:hover { background: #fde8e8; color: #e74c3c; }
 .btn-add-row { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; color: var(--primary); padding: 10px 0; }
 .btn-add-row:hover { opacity: 0.75; }
+.ingredient-group { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 18px 18px 12px; margin-bottom: 16px; background: var(--surface); }
+.ingredient-group-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.ingredient-group-name { flex: 1; padding: 9px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: .88rem; font-weight: 600; outline: none; transition: border-color .25s; background: var(--bg); color: var(--text); }
+.ingredient-group-name:focus { border-color: var(--primary); }
+.ingredient-group-name::placeholder { font-weight: 400; color: var(--text-muted); }
+.btn-remove-group { font-size: .78rem; font-weight: 600; color: #e74c3c; border: 1.5px solid #e74c3c; background: transparent; border-radius: var(--radius-sm); padding: 6px 12px; cursor: pointer; white-space: nowrap; transition: background .2s; flex-shrink: 0; }
+.btn-remove-group:hover { background: #fde8e8; }
+.btn-add-in-group { padding: 6px 0; font-size: .82rem; }
+.ingredient-group-title { font-size: .95rem; font-weight: 700; color: var(--text); margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 1.5px solid var(--primary-light); }
 .file-upload-area {
     border: 1.5px solid var(--border);
     border-radius: var(--radius);

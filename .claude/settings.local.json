@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(git remote:*)",
+      "Bash(grep -n 'href=\"#\"' /c/Users/Danli/Documents/VSCode/Recipeez/*.html)",
+      "Bash(grep -n 'action=' /c/Users/Danli/Documents/VSCode/Recipeez/*.html)",
+      "Bash(gh api *)",
+      "Bash(grep -l \"supabase-client.js\" c:/Users/Danli/Documents/VSCode/Recipeez/*.html)"
+    ]
+  }
+}

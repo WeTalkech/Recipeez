@@ -423,20 +423,62 @@ document.getElementById('contactForm')?.addEventListener('submit', (e) => {
     }, 4000);
 });
 
-// ---- Submit recipe — Add / Remove ingredient rows ----
-const ingredientsList = document.getElementById('ingredientsList');
-if (ingredientsList) {
-    document.getElementById('addIngredient').addEventListener('click', () => {
+// ---- Submit recipe — Ingredient groups ----
+const ingredientGroups = document.getElementById('ingredientGroups');
+if (ingredientGroups) {
+    function makeIngredientRow(placeholder) {
+        placeholder = placeholder || 'e.g. 1 cup sugar';
         const row = document.createElement('div');
         row.className = 'ingredient-row';
-        row.innerHTML = `<input type="text" class="form-group" style="padding:13px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:.93rem;outline:none;transition:border-color .25s ease;" placeholder="e.g. 1 cup sugar"><button type="button" class="btn-remove" aria-label="Remove">×</button>`;
-        ingredientsList.appendChild(row);
+        row.innerHTML = `<input type="text" class="form-group" style="padding:13px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:.93rem;outline:none;transition:border-color .25s ease;" placeholder="${placeholder}"><button type="button" class="btn-remove" aria-label="Remove">×</button>`;
+        return row;
+    }
+
+    function makeIngredientGroup() {
+        const group = document.createElement('div');
+        group.className = 'ingredient-group';
+        group.innerHTML = `
+            <div class="ingredient-group-header">
+                <input type="text" class="ingredient-group-name" placeholder="Group label (optional, e.g. Topping)">
+                <button type="button" class="btn-remove-group" aria-label="Remove group">Remove Group</button>
+            </div>
+            <div class="ingredient-group-rows"></div>
+            <button type="button" class="btn-add-row btn-add-in-group">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Ingredient
+            </button>`;
+        group.querySelector('.ingredient-group-rows').appendChild(makeIngredientRow());
+        return group;
+    }
+
+    function refreshRemoveGroupButtons() {
+        const groups = ingredientGroups.querySelectorAll('.ingredient-group');
+        groups.forEach(g => {
+            g.querySelector('.btn-remove-group').style.display = groups.length > 1 ? '' : 'none';
+        });
+    }
+
+    document.getElementById('addIngredientGroup').addEventListener('click', () => {
+        ingredientGroups.appendChild(makeIngredientGroup());
+        refreshRemoveGroupButtons();
     });
 
-    ingredientsList.addEventListener('click', (e) => {
+    ingredientGroups.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-add-in-group') || e.target.closest('.btn-add-in-group')) {
+            const group = e.target.closest('.ingredient-group');
+            group.querySelector('.ingredient-group-rows').appendChild(makeIngredientRow());
+        }
         if (e.target.classList.contains('btn-remove')) {
-            const rows = ingredientsList.querySelectorAll('.ingredient-row');
-            if (rows.length > 1) e.target.closest('.ingredient-row').remove();
+            const groupRows = e.target.closest('.ingredient-group-rows');
+            if (groupRows.querySelectorAll('.ingredient-row').length > 1) {
+                e.target.closest('.ingredient-row').remove();
+            }
+        }
+        if (e.target.classList.contains('btn-remove-group')) {
+            if (ingredientGroups.querySelectorAll('.ingredient-group').length > 1) {
+                e.target.closest('.ingredient-group').remove();
+                refreshRemoveGroupButtons();
+            }
         }
     });
 }
@@ -498,8 +540,13 @@ if (instructionsList) {
             if (!category)    { alert('Please select a category.'); return; }
             if (!description) { alert('Please add a description.'); return; }
 
-            const ingredients  = Array.from(document.querySelectorAll('#ingredientsList .ingredient-row input'))
-                                      .map(i => i.value.trim()).filter(Boolean);
+            const rawGroups = Array.from(document.querySelectorAll('#ingredientGroups .ingredient-group')).map(g => ({
+                group: g.querySelector('.ingredient-group-name').value.trim(),
+                items: Array.from(g.querySelectorAll('.ingredient-group-rows .ingredient-row input')).map(i => i.value.trim()).filter(Boolean)
+            })).filter(g => g.items.length > 0);
+            const ingredients = (rawGroups.length === 1 && !rawGroups[0].group)
+                ? rawGroups[0].items
+                : rawGroups;
             const instructions = Array.from(document.querySelectorAll('#instructionsList .instruction-row textarea'))
                                       .map(t => t.value.trim()).filter(Boolean);
 
@@ -663,12 +710,19 @@ if (instructionsList) {
     const desc = document.querySelector('.recipe-description');
     if (desc) desc.textContent = r.description;
 
-    // Ingredients
+    // Ingredients — supports flat array (legacy) or grouped [{group, items}] format
     const ingList = document.querySelector('.ingredients-list');
     if (ingList && r.ingredients?.length) {
-        ingList.innerHTML = r.ingredients.map(ing =>
-            `<div class="ingredient-item"><div class="ingredient-check"></div> ${ing}</div>`
-        ).join('');
+        if (typeof r.ingredients[0] === 'object' && r.ingredients[0] !== null) {
+            ingList.innerHTML = r.ingredients.map(g =>
+                (g.group ? `<div class="ingredient-group-title">${g.group}</div>` : '') +
+                g.items.map(ing => `<div class="ingredient-item"><div class="ingredient-check"></div> ${ing}</div>`).join('')
+            ).join('');
+        } else {
+            ingList.innerHTML = r.ingredients.map(ing =>
+                `<div class="ingredient-item"><div class="ingredient-check"></div> ${ing}</div>`
+            ).join('');
+        }
     }
 
     // Instructions

@@ -146,23 +146,36 @@
             <!-- INGREDIENTS -->
             <div class="submit-form-section">
                 <h3 class="submit-form-section-title">Ingredients</h3>
-                <div id="ingredientsList">
-                    <div class="ingredient-row">
-                        <input type="text" class="form-group" style="padding:13px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:.93rem;outline:none;transition:border-color .25s ease;" placeholder="e.g. 2 cups all-purpose flour">
-                        <button type="button" class="btn-remove" aria-label="Remove">×</button>
-                    </div>
-                    <div class="ingredient-row">
-                        <input type="text" class="form-group" style="padding:13px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:.93rem;outline:none;transition:border-color .25s ease;" placeholder="e.g. 1 tsp baking powder">
-                        <button type="button" class="btn-remove" aria-label="Remove">×</button>
-                    </div>
-                    <div class="ingredient-row">
-                        <input type="text" class="form-group" style="padding:13px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:.93rem;outline:none;transition:border-color .25s ease;" placeholder="e.g. 2 large eggs, separated">
-                        <button type="button" class="btn-remove" aria-label="Remove">×</button>
+                <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:18px;">Have multiple parts (e.g. Cake + Topping)? Add a group for each.</p>
+                <div id="ingredientGroups">
+                    <div class="ingredient-group">
+                        <div class="ingredient-group-header">
+                            <input type="text" class="ingredient-group-name" placeholder="Group label (optional, e.g. Cake Batter)">
+                            <button type="button" class="btn-remove-group" aria-label="Remove group" style="display:none;">Remove Group</button>
+                        </div>
+                        <div class="ingredient-group-rows">
+                            <div class="ingredient-row">
+                                <input type="text" class="form-group" style="padding:13px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:.93rem;outline:none;transition:border-color .25s ease;" placeholder="e.g. 2 cups all-purpose flour">
+                                <button type="button" class="btn-remove" aria-label="Remove">×</button>
+                            </div>
+                            <div class="ingredient-row">
+                                <input type="text" class="form-group" style="padding:13px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:.93rem;outline:none;transition:border-color .25s ease;" placeholder="e.g. 1 tsp baking powder">
+                                <button type="button" class="btn-remove" aria-label="Remove">×</button>
+                            </div>
+                            <div class="ingredient-row">
+                                <input type="text" class="form-group" style="padding:13px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:.93rem;outline:none;transition:border-color .25s ease;" placeholder="e.g. 2 large eggs, separated">
+                                <button type="button" class="btn-remove" aria-label="Remove">×</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add-row btn-add-in-group">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Add Ingredient
+                        </button>
                     </div>
                 </div>
-                <button type="button" class="btn-add-row" id="addIngredient">
+                <button type="button" class="btn-add-row" id="addIngredientGroup" style="margin-top:8px;color:var(--text-muted);border:1.5px dashed var(--border);padding:10px 18px;border-radius:var(--radius-sm);width:100%;justify-content:center;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Add Ingredient
+                    Add Ingredient Group
                 </button>
             </div>
 
