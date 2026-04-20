@@ -727,6 +727,29 @@ if (instructionsList) {
     });
 })();
 
+// ---- Hero / About stats — load real counts from Supabase ----
+(async function () {
+    const elRecipes = document.getElementById('statRecipes');
+    const elCooks   = document.getElementById('statCooks');
+    if ((!elRecipes && !elCooks) || !window.sb) return;
+
+    const [recipesRes, cooksRes] = await Promise.all([
+        sb.from('recipes').select('*', { count: 'exact', head: true }).eq('status', 'published'),
+        sb.from('profiles').select('*', { count: 'exact', head: true })
+    ]);
+
+    const recipeCount = recipesRes.count ?? 0;
+    const cookCount   = cooksRes.count ?? 0;
+
+    function fmt(n) {
+        if (n >= 1000) return (n / 1000).toFixed(n % 1000 === 0 ? 0 : 1).replace(/\.0$/, '') + 'k';
+        return n.toString();
+    }
+
+    if (elRecipes) elRecipes.textContent = recipeCount > 0 ? fmt(recipeCount) + '+' : '0';
+    if (elCooks)   elCooks.textContent   = cookCount   > 0 ? fmt(cookCount)   + '+' : '0';
+})();
+
 // ---- Lazy-load images (IntersectionObserver) ----
 if ('IntersectionObserver' in window) {
     const lazyImgs = document.querySelectorAll('img[data-src]');
