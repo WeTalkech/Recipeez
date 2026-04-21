@@ -369,9 +369,10 @@ h3 { font-size: clamp(1.05rem, 2vw, 1.3rem); }
 .hero-subtitle {
     font-size: 1.12rem;
     color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 40px;
+    margin: 0 auto 40px;
     max-width: 500px;
     line-height: 1.72;
+    text-align: center;
 }
 
 .hero-cta {
