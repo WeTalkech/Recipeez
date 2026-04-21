@@ -6,7 +6,14 @@
       "Bash(grep -n 'href=\"#\"' /c/Users/Danli/Documents/VSCode/Recipeez/*.html)",
       "Bash(grep -n 'action=' /c/Users/Danli/Documents/VSCode/Recipeez/*.html)",
       "Bash(gh api *)",
-      "Bash(grep -l \"supabase-client.js\" c:/Users/Danli/Documents/VSCode/Recipeez/*.html)"
+      "Bash(grep -l \"supabase-client.js\" c:/Users/Danli/Documents/VSCode/Recipeez/*.html)",
+      "Bash(git checkout *)",
+      "Bash(git merge *)",
+      "Bash(git push *)",
+      "Bash(git stash *)",
+      "Bash(python3 -c ' *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
