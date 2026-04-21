@@ -236,6 +236,26 @@
 <script src="js/supabase-client.js"></script>
 <script src="js/main.js"></script>
 <script>
+function resizeImageToBlob(file, targetW, targetH) {
+    return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width  = targetW;
+            canvas.height = targetH;
+            const ctx   = canvas.getContext('2d');
+            const scale = Math.max(targetW / img.width, targetH / img.height);
+            const sw    = targetW  / scale;
+            const sh    = targetH  / scale;
+            const sx    = (img.width  - sw) / 2;
+            const sy    = (img.height - sh) / 2;
+            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
+            canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.88);
+        };
+        img.src = URL.createObjectURL(file);
+    });
+}
+
 (async function () {
     if (!window.sb) { window.location.href = 'login.html'; return; }
 
@@ -371,6 +391,7 @@
     // ---- Show existing photo ----
     let currentPhotoUrl = recipe.photo_url || null;
     let removePhoto = false;
+    let editPhotoBlob = null;
 
     if (currentPhotoUrl) {
         document.getElementById('photoPreview').hidden = false;
@@ -380,18 +401,20 @@
         document.querySelector('.upload-placeholder').hidden = true;
     }
 
-    document.getElementById('recipe-photo').addEventListener('change', e => {
+    document.getElementById('recipe-photo').addEventListener('change', async e => {
         const file = e.target.files[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-            document.getElementById('photoPreviewImg').src = ev.target.result;
-            document.getElementById('photoFileName').textContent = file.name;
-            document.getElementById('photoPreview').hidden = false;
-            document.getElementById('removePhotoWrap').hidden = false;
-            document.querySelector('.upload-placeholder').hidden = true;
-        };
-        reader.readAsDataURL(file);
+        if (file.size > 10 * 1024 * 1024) {
+            alert('Photo must be under 10 MB.');
+            e.target.value = '';
+            return;
+        }
+        editPhotoBlob = await resizeImageToBlob(file, 1200, 800);
+        document.getElementById('photoPreviewImg').src = URL.createObjectURL(editPhotoBlob);
+        document.getElementById('photoFileName').textContent = `${file.name} (resized to 1200×800)`;
+        document.getElementById('photoPreview').hidden = false;
+        document.getElementById('removePhotoWrap').hidden = false;
+        document.querySelector('.upload-placeholder').hidden = true;
         removePhoto = false;
     });
 
@@ -402,6 +425,7 @@
         document.querySelector('.upload-placeholder').hidden = false;
         removePhoto = true;
         currentPhotoUrl = null;
+        editPhotoBlob = null;
     });
 
     // ---- Save ----
@@ -417,13 +441,12 @@
         this.textContent = 'Saving…';
         this.disabled = true;
 
-        // Handle photo upload
+        // Handle photo upload (use resized blob if available)
         let photoUrl = removePhoto ? null : currentPhotoUrl;
-        const photoFile = document.getElementById('recipe-photo').files[0];
-        if (photoFile) {
-            const ext  = photoFile.name.split('.').pop();
-            const path = `${session.user.id}/${Date.now()}.${ext}`;
-            const { error: upErr } = await sb.storage.from('recipe-photos').upload(path, photoFile);
+        const uploadData = editPhotoBlob;
+        if (uploadData) {
+            const path = `${session.user.id}/${Date.now()}.jpg`;
+            const { error: upErr } = await sb.storage.from('recipe-photos').upload(path, uploadData, { contentType: 'image/jpeg' });
             if (!upErr) {
                 const { data: urlData } = sb.storage.from('recipe-photos').getPublicUrl(path);
                 photoUrl = urlData.publicUrl;

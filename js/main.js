@@ -205,6 +205,27 @@ document.querySelector('a[href="#recipes"]')?.addEventListener('click', (e) => {
     }
 });
 
+// ---- Resize image to fixed frame (cover crop) via Canvas ----
+function resizeImageToBlob(file, targetW, targetH) {
+    return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width  = targetW;
+            canvas.height = targetH;
+            const ctx   = canvas.getContext('2d');
+            const scale = Math.max(targetW / img.width, targetH / img.height);
+            const sw    = targetW  / scale;
+            const sh    = targetH  / scale;
+            const sx    = (img.width  - sw) / 2;
+            const sy    = (img.height - sh) / 2;
+            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
+            canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.88);
+        };
+        img.src = URL.createObjectURL(file);
+    });
+}
+
 // ---- Photo upload preview ----
 const photoInput = document.getElementById('recipe-photo');
 if (photoInput) {
@@ -216,7 +237,9 @@ if (photoInput) {
     const removeBtn     = document.getElementById('removePhoto');
     const removeBtnWrap = document.getElementById('removePhotoWrap');
 
-    photoInput.addEventListener('change', () => {
+    window.recipePhotoBlob = null;
+
+    photoInput.addEventListener('change', async () => {
         const file = photoInput.files[0];
         if (!file) return;
 
@@ -226,27 +249,26 @@ if (photoInput) {
             return;
         }
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            previewImg.src       = e.target.result;
-            fileName.textContent = file.name;
-            placeholder.hidden   = true;
-            preview.hidden       = false;
-            removeBtnWrap.hidden = false;
-            uploadArea.classList.add('has-photo');
-        };
-        reader.readAsDataURL(file);
+        window.recipePhotoBlob = await resizeImageToBlob(file, 1200, 800);
+        const dataUrl = URL.createObjectURL(window.recipePhotoBlob);
+        previewImg.src       = dataUrl;
+        fileName.textContent = `${file.name} (resized to 1200×800)`;
+        placeholder.hidden   = true;
+        preview.hidden       = false;
+        removeBtnWrap.hidden = false;
+        uploadArea.classList.add('has-photo');
     });
 
     removeBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        photoInput.value       = '';
-        previewImg.src         = '';
-        fileName.textContent   = '';
-        placeholder.hidden     = false;
-        preview.hidden         = true;
-        removeBtnWrap.hidden   = true;
+        photoInput.value        = '';
+        previewImg.src          = '';
+        fileName.textContent    = '';
+        placeholder.hidden      = false;
+        preview.hidden          = true;
+        removeBtnWrap.hidden    = true;
         uploadArea.classList.remove('has-photo');
+        window.recipePhotoBlob  = null;
     });
 }
 
@@ -553,13 +575,14 @@ if (instructionsList) {
             this.textContent = 'Submitting…';
             this.disabled = true;
 
-            // Upload photo if provided
+            // Upload photo if provided (use resized blob if available)
             let photoUrl = null;
+            const photoBlob = window.recipePhotoBlob;
             const photoFile = document.getElementById('recipe-photo')?.files[0];
-            if (photoFile) {
-                const ext  = photoFile.name.split('.').pop();
-                const path = `${session.user.id}/${Date.now()}.${ext}`;
-                const { error: upErr } = await sb.storage.from('recipe-photos').upload(path, photoFile);
+            const uploadData = photoBlob || photoFile;
+            if (uploadData) {
+                const path = `${session.user.id}/${Date.now()}.jpg`;
+                const { error: upErr } = await sb.storage.from('recipe-photos').upload(path, uploadData, { contentType: 'image/jpeg' });
                 if (!upErr) {
                     const { data: urlData } = sb.storage.from('recipe-photos').getPublicUrl(path);
                     photoUrl = urlData.publicUrl;

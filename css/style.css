@@ -626,19 +626,19 @@ h3 { font-size: clamp(1.05rem, 2vw, 1.3rem); }
     border-color: transparent;
 }
 
-.card-media {
+.card-media, .card-img-wrap {
     position: relative;
     display: block;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 3 / 2;
     overflow: hidden;
     background: var(--surface2);
 }
-.card-media img {
+.card-media img, .card-img-wrap img {
     width: 100%; height: 100%;
     object-fit: cover;
     transition: transform 0.45s ease;
 }
-.recipe-card:hover .card-media img { transform: scale(1.07); }
+.recipe-card:hover .card-media img, .recipe-card:hover .card-img-wrap img { transform: scale(1.07); }
 
 .card-pill {
     position: absolute;
