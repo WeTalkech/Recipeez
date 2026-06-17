@@ -207,6 +207,8 @@ h3 { font-size: clamp(1.05rem, 2vw, 1.3rem); }
 
 .nav-cta { font-size: 0.88rem; padding: 10px 20px; }
 
+.mobile-auth-link { display: none; }
+
 .nav-toggle {
     display: none;
     flex-direction: column;
@@ -865,6 +867,9 @@ h3 { font-size: clamp(1.05rem, 2vw, 1.3rem); }
     .nav-cta { display: none; }
     .nav-toggle { display: flex; }
     .nav-actions { margin-left: auto; }
+
+    .mobile-auth-link { display: list-item; }
+    .mobile-auth-link:first-of-type { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 8px; }
 
     .nav-links.open {
         display: flex;
