@@ -8,16 +8,14 @@ window.addEventListener('scroll', () => {
     header.classList.toggle('scrolled', window.scrollY > 10);
 }, { passive: true });
 
-// ---- Nav auth state — swap Log In ↔ Profile ----
+// ---- Nav auth state — point Account link at profile when logged in ----
 (async function () {
     if (!window.sb) return;
     const { data: { session } } = await sb.auth.getSession();
-    const loginBtn = document.querySelector('.nav-actions a[href="login.html"]');
-    if (!loginBtn) return;
-    if (session) {
-        loginBtn.href = 'profile.html';
-        loginBtn.textContent = 'Profile';
-    }
+    if (!session) return;
+    document.querySelectorAll('a.nav-account-link, #mobileLoginLink').forEach(el => {
+        el.href = 'profile.html';
+    });
 })();
 
 // ---- Mobile nav toggle ----
